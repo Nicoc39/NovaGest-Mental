@@ -1,0 +1,3 @@
+ADR-001: El cliente inicial será un consultorio psicológico con múltiples profesionales.
+ADR-002: El análisis funcional no hará referencia a tecnologías específicas.
+ADR-003: La facturación electrónica queda fuera del alcance del MVP.
