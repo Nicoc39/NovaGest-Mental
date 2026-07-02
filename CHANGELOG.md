@@ -12,3 +12,5 @@
 - Se redactaron las reglas del negocio
 - Se redactó la descripción del negocio
 - Se redactaron los problemas encontrados
+- Se redactaron los riesgos y supuestos
+- Se redactó proximas etapas

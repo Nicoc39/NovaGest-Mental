@@ -10,7 +10,7 @@ Análisis del Negocio
 
 ### Versión
 
-v0.1
+v0.1.0
 
 ### Estado
 
@@ -211,3 +211,53 @@ Tiempo excesivo dedicado a tareas administrativas repetitivas: El personal opera
 Dificultad para obtener información consolidada sobre la actividad del consultorio: Al finalizar un período, resulta sumamente complejo y lento evaluar el rendimiento del negocio. Calcular los ingresos totales generados, identificar el volumen de sesiones realizadas por cada profesional o conocer el índice de ausentismo de los pacientes requiere recolectar y unificar manualmente datos de diversas planillas, lo que impide una toma de decisiones basada en indicadores claros y actualizados.
 
 9. Riesgos y supuestos
+
+Predisposición al cambio operativo: La dirección del consultorio y su equipo están totalmente dispuestos a reemplazar o complementar sus registros manuales y planillas tradicionales por un sistema digital centralizado.
+
+Compromiso con la actualización de datos: La información que se ingrese al sistema será responsabilidad exclusiva de los usuarios autorizados, asumiendo el compromiso de mantenerla al día con el fin de garantizar la integridad y actualización de la información registrada.
+
+Cumplimiento del marco legal vigente: Los profesionales que utilicen la plataforma cuentan con la matrícula profesional habilitante y la documentación legal requerida para ejercer su actividad clínica.
+
+Disponibilidad de información inicial: Se asume que el consultorio dispone de la información mínima necesaria de pacientes, profesionales y agenda para realizar la carga inicial del sistema.
+
+
+
+Riesgos
+A continuación, se detallan aquellos factores del entorno, del negocio y del ámbito técnico que podrían afectar negativamente el éxito del proyecto o la continuidad de la operación del consultorio:
+
+Resistencia al cambio organizacional: Existe la posibilidad de que los psicólogos o el personal administrativo, habituados al uso de registros manuales o herramientas tradicionales, muestren renuencia a adoptar la nueva plataforma, lo que podría ralentizar la fase de implementación o provocar un uso incorrecto de la misma.
+
+Errores en la carga inicial y migración de datos: El traspaso de la información histórica desde soportes físicos o planillas dispersas hacia el nuevo sistema conlleva un riesgo elevado de omisión de datos, duplicados o errores de transcripción, afectando la calidad de la información registrada desde el inicio.
+
+Modificaciones en el marco regulatorio: Cambios imprevistos en la normativa legal y fiscal vigente en materia de salud mental (como regulaciones sobre el manejo de historias clínicas) o variaciones en los requerimientos de las obras sociales podrían exigir modificaciones estructurales no planificadas en la lógica del sistema.
+
+Escalabilidad desalineada con el MVP: Un crecimiento acelerado del consultorio o la incorporación de nuevas dinámicas comerciales podrían demandar de forma inmediata funcionalidades complejas (como facturación electrónica o integraciones externas) que no están contempladas dentro del alcance de esta primera versión.
+
+Pérdida de información crítica por fallas de respaldo: Al centralizar datos sensibles (clínicos y financieros), la falta de políticas estrictas o fallas en los mecanismos de copias de seguridad automáticas ante un incidente de infraestructura representa un riesgo crítico para la continuidad del negocio.
+
+Inconsistencia operativa por errores continuos de carga: La introducción de datos erróneos o incompletos de forma recurrente por parte de los usuarios (por ejemplo, en los estados de pago o datos de DNI) puede corromper la integridad de la base de datos, restándole confiabilidad a los reportes administrativos generados.
+
+10. Próximas Etapas
+
+Próximas etapas
+Este análisis del negocio representa el punto de partida y la base sólida sobre la cual se construirá todo el proyecto. Al haber definido con claridad qué hace el consultorio, cuáles son sus reglas y qué problemas se necesitan resolver, es momento de avanzar hacia el diseño técnico y la construcción de la solución. A partir de este documento, el proyecto seguirá un camino estructurado que transformará estos requerimientos en un sistema real y funcional a través de los siguientes pasos:
+
+Elaboración del modelo conceptual de datos (DER): Crear un diagrama visual que represente cómo se relacionan entre sí los elementos principales del negocio (pacientes, profesionales, turnos, etc.).
+
+Construcción del modelo relacional: Traducir ese diagrama visual a una estructura de tablas, definiendo cómo se organizará la información internamente.
+
+Elaboración del diccionario de datos: Crear un documento guía que detalle las características específicas de cada dato que se guardará (por ejemplo, si el DNI es un número, qué longitud tiene, etc.).
+
+Implementación de la base de datos en PostgreSQL: Crear de forma real la base de datos en el servidor utilizando este motor de almacenamiento.
+
+Desarrollo de consultas, vistas y funciones: Programar los mecanismos internos para que la base de datos pueda buscar, filtrar y procesar la información de manera rápida y eficiente.
+
+Diseño de la arquitectura de la aplicación: Planificar la estructura técnica y los componentes de software que darán soporte al sistema.
+
+Desarrollo del backend: Programar el "cerebro" del sistema, es decir, la lógica interna que procesará las solicitudes, validará las reglas de negocio y conectará la pantalla con la base de datos.
+
+Desarrollo del frontend: Diseñar y construir las pantallas, botones y la interfaz visual con la que interactuarán los secretarios, psicólogos y administradores.
+
+Pruebas funcionales y validación con usuarios: Poner a prueba el sistema en escenarios reales para asegurar que funcione sin errores y que realmente resuelva los problemas identificados.
+
+Preparación de la primera versión estable del sistema: Realizar los ajustes finales y dejar la plataforma lista para su puesta en marcha oficial en el consultorio.
