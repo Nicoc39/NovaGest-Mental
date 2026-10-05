@@ -1815,16 +1815,22 @@ formConsultorio.addEventListener("submit", async (evento) => {
 
 function configurarMenuPorRol(rol) {
 
-    const opcionConsultorios =
-        document.querySelector(
-            '.opcion-menu[onclick*="\'seccionConsultorios\'"]'
-        );
+    const enlacesMenu =
+        document.querySelectorAll(".opcion-menu");
 
-    if (rol !== "SUPERADMIN") {
-        opcionConsultorios.classList.add("oculto");
-    } else {
-        opcionConsultorios.classList.remove("oculto");
-    }
+    enlacesMenu.forEach(enlace => {
+
+        if (
+            enlace.textContent.trim() === "Consultorios"
+        ) {
+
+            if (rol !== "SUPERADMIN") {
+                enlace.classList.add("oculto");
+            } else {
+                enlace.classList.remove("oculto");
+            }
+        }
+    });
 }
 
 /* INICIO */
