@@ -1707,6 +1707,64 @@ async function cargarConsultorios() {
     }
 }
 
+async function cargarListaConsultorios() {
+
+    try {
+
+        const respuesta =
+            await apiFetch("/consultorios");
+
+        const consultorios =
+            await respuesta.json();
+
+        listaConsultorios.innerHTML = "";
+
+        if (consultorios.length === 0) {
+
+            listaConsultorios.innerHTML =
+                "<p>No hay consultorios registrados.</p>";
+
+            return;
+        }
+
+        consultorios.forEach(consultorio => {
+
+            const elemento =
+                document.createElement("div");
+
+            elemento.classList.add("tarjeta", "tarjeta-consultorio");
+
+            elemento.innerHTML = `
+                <h3>${consultorio.nombre}</h3>
+
+                <p><strong>Dirección:</strong> ${
+                    consultorio.direccion ||
+                    "No registrada"
+                }</p>
+
+                <p><strong>Teléfono:</strong> ${
+                    consultorio.telefono ||
+                    "No registrado"
+                }</p>
+
+                <p><strong>Email:</strong> ${
+                    consultorio.email ||
+                    "No registrado"
+                }</p>
+            `;
+
+            listaConsultorios.appendChild(elemento);
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        listaConsultorios.innerHTML =
+            "<p>No se pudieron cargar los consultorios.</p>";
+    }
+}
+
 
 formConsultorio.addEventListener("submit", async (evento) => {
 
