@@ -1863,6 +1863,17 @@ function configurarMenuPorRol(rol) {
                 enlace.classList.remove("oculto");
             }
         }
+
+                if (
+            enlace.textContent.trim() === "Pagos"
+        ) {
+
+            if (rol === "PROFESIONAL") {
+                enlace.classList.add("oculto");
+            } else {
+                enlace.classList.remove("oculto");
+            }
+        }
     });
 }
 
