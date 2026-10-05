@@ -84,7 +84,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://gentle-sprite-542e38.netlify.app"
+        "https://novagest-mental.netlify.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
