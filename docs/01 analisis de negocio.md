@@ -3,49 +3,26 @@
 ## Sistema Integral de Gestión para Consultorios Psicológicos
 
 ---
+NovaGest Mental
 
-### Documento
-
+Documento 01
 Análisis del Negocio
 
-### Versión
+Versión: 0.1.0
+Estado: En desarrollo
 
-v0.1.0
-
-### Estado
-
-En desarrollo
-
-### Autor
-
+Autor:
 Nicolás Carranza
 
-### Fecha
+Proyecto:
+NovaGest Mental
 
-30 de junio de 2026
+Fecha de creación:
+30/06/2026
 
-###
-Índice
+Última actualización:
+02/07/2026
 
-1. Introducción
-
-2. Objetivo
-
-3. Alcance
-
-4. Actores involucrados
-
-5. Procesos del negocio
-
-6. Reglas de negocio
-
-7. Descripción del negocio
-
-8. Problemas identificados
-
-9. Riesgos y supuestos
-
-10. Próximas etapas
 
 ###
 1. Introducción
@@ -136,9 +113,9 @@ A modo de actor secundario tenemos a los pacientes, si bien no interactua direct
     5. Proceso de administración de profesionales
 * Se verifican las credenciales del profesional
 * Se da de alta al profesional en el sistema
-*Se le asigna una agenda 
-*Se configura su disponibilidad de dias y horarios
-*Se gestionan las asignaciones de pacientes
+* Se le asigna una agenda 
+* Se configura su disponibilidad de dias y horarios
+* Se gestionan los turnos y la atención de los pacientes
 
     6. Proceso de reportes
 * Se recopilan los datos de las sesiones
@@ -168,8 +145,8 @@ REGLAS DE NEGOCIO
 
     4. Profesionales
 *Todo profesional debe contar con la matricula profesional vigente
-*Un profesional debe estar asociado al menos a un consultorio
-*Un profesional puede tener varios pacientes asignados
+*Un profesional debe estar asociado al menos a un consultorio y puede trabajar un múltiples consultorios
+*Un profesional puede atender a múltiples pacientes
 *Los turnos se asignan de acuerdo a la disponibilidad del profesional
 
     5. Pagos
