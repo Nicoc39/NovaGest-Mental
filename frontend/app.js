@@ -182,16 +182,17 @@ formLogin.addEventListener("submit", async (evento) => {
 
         const rolUsuario = datos.usuario.rol;
 
-        const opcionConsultorios =
-            document.querySelector(
-                '.opcion-menu[onclick*="\'seccionConsultorios\'"]'
-            );
+        document.querySelectorAll(".opcion-menu").forEach(opcion => {
 
-        if (rolUsuario !== "SUPERADMIN") {
-            opcionConsultorios.classList.add("oculto");
-        } else {
-            opcionConsultorios.classList.remove("oculto");
-        }
+            if (opcion.textContent.trim() === "Consultorios") {
+
+                if (rolUsuario !== "SUPERADMIN") {
+                    opcion.classList.add("oculto");
+                } else {
+                    opcion.classList.remove("oculto");
+                }
+            }
+        });
 
 
         btnNuevoProfesional.classList.remove("oculto");
