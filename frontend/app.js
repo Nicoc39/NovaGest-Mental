@@ -206,12 +206,6 @@ formLogin.addEventListener("submit", async (evento) => {
 
 
 
-        mostrarAplicacion();
-
-
-
-
-
         cargarConsultorios();
 
 
