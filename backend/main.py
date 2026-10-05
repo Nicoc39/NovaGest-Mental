@@ -1121,7 +1121,13 @@ class Sesion(BaseModel):
 
 @app.get("/sesiones")
 def listar_sesiones(
-    usuario=Depends(obtener_usuario_actual)
+    usuario=Depends(
+        verificar_roles(
+            "SUPERADMIN",
+            "ADMINISTRADOR",
+            "PROFESIONAL"
+        )
+    )
 ):
     cursor = conexion.cursor()
 
@@ -1178,7 +1184,13 @@ def listar_sesiones(
 @app.post("/sesiones")
 def crear_sesion(
     sesion: Sesion,
-    usuario=Depends(obtener_usuario_actual)
+    usuario=Depends(
+        verificar_roles(
+            "SUPERADMIN",
+            "ADMINISTRADOR",
+            "PROFESIONAL"
+        )
+    )
 ):
     cursor = conexion.cursor()
 
@@ -1269,7 +1281,13 @@ class Pago(BaseModel):
 
 @app.get("/pagos")
 def listar_pagos(
-    usuario=Depends(obtener_usuario_actual)
+    usuario=Depends(
+        verificar_roles(
+            "SUPERADMIN",
+            "ADMINISTRADOR",
+            "ADMINISTRATIVO"
+        )
+    )
 ):
     cursor = conexion.cursor()
 
@@ -1327,7 +1345,13 @@ def listar_pagos(
 @app.post("/pagos")
 def crear_pago(
     pago: Pago,
-    usuario=Depends(obtener_usuario_actual)
+    usuario=Depends(
+        verificar_roles(
+            "SUPERADMIN",
+            "ADMINISTRADOR",
+            "ADMINISTRATIVO"
+        )
+    )
 ):
     cursor = conexion.cursor()
 
@@ -1408,7 +1432,13 @@ class ObraSocial(BaseModel):
 
 @app.get("/obras-sociales")
 def listar_obras_sociales(
-    usuario=Depends(obtener_usuario_actual)
+    usuario=Depends(
+        verificar_roles(
+            "SUPERADMIN",
+            "ADMINISTRADOR",
+            "ADMINISTRATIVO"
+        )
+    )
 ):
     cursor = conexion.cursor()
 
@@ -1442,7 +1472,13 @@ def listar_obras_sociales(
 @app.post("/obras-sociales")
 def crear_obra_social(
     obra_social: ObraSocial,
-    usuario=Depends(obtener_usuario_actual)
+    usuario=Depends(
+        verificar_roles(
+            "SUPERADMIN",
+            "ADMINISTRADOR",
+            "ADMINISTRATIVO"
+        )
+    )
 ):
     cursor = conexion.cursor()
 
@@ -1485,7 +1521,13 @@ class PacienteObraSocial(BaseModel):
 
 @app.get("/pacientes-obras-sociales")
 def listar_pacientes_obras_sociales(
-    usuario=Depends(obtener_usuario_actual)
+    usuario=Depends(
+        verificar_roles(
+            "SUPERADMIN",
+            "ADMINISTRADOR",
+            "ADMINISTRATIVO"
+        )
+    )
 ):
     cursor = conexion.cursor()
 
@@ -1535,7 +1577,13 @@ def listar_pacientes_obras_sociales(
 @app.post("/pacientes-obras-sociales")
 def crear_paciente_obra_social(
     relacion: PacienteObraSocial,
-    usuario=Depends(obtener_usuario_actual)
+    usuario=Depends(
+        verificar_roles(
+            "SUPERADMIN",
+            "ADMINISTRADOR",
+            "ADMINISTRATIVO"
+        )
+    )
 ):
     cursor = conexion.cursor()
 
