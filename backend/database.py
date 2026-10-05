@@ -1,8 +1,10 @@
+import os
 import psycopg2
 
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+
 conexion = psycopg2.connect(
-    host="localhost",
-    database="novagest_mental",
-    user="postgres",
-    password="394hui987"
+    DATABASE_URL
 )
