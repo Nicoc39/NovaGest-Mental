@@ -1842,7 +1842,9 @@ if (tokenGuardado) {
 
     mostrarAplicacion();
 
-    configurarMenuPorRol(usuario.rol);
+    const rolGuardado = localStorage.getItem("rol");
+
+    configurarMenuPorRol(rolGuardado);
 
     cargarConsultorios();
     cargarPacientes();
