@@ -334,7 +334,9 @@ def listar_pacientes(usuario=Depends(obtener_usuario_actual)):
 
 @app.get("/historias-clinicas")
 def listar_historias_clinicas(
-    usuario=Depends(obtener_usuario_actual)
+    usuario=Depends(
+        verificar_roles("SUPERADMIN", "ADMINISTRADOR", "PROFESIONAL")
+    )
 ):
     cursor = conexion.cursor()
 
@@ -379,7 +381,9 @@ def listar_historias_clinicas(
 @app.post("/historias-clinicas")
 def crear_historia_clinica(
     historia: HistoriaClinica,
-    usuario=Depends(obtener_usuario_actual)
+    usuario=Depends(
+        verificar_roles("SUPERADMIN", "ADMINISTRADOR", "PROFESIONAL")
+    )
 ):
     cursor = conexion.cursor()
 
