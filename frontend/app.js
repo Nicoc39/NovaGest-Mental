@@ -1923,9 +1923,12 @@ if (tokenGuardado) {
     cargarProfesionales();
     cargarTurnos();
     cargarSesiones();
-    cargarPagos();
-    cargarObrasSociales();
     cargarHistorias();
+
+    if (rolGuardado !== "PROFESIONAL") {
+        cargarPagos();
+        cargarObrasSociales();
+    }
 
 } else {
 
