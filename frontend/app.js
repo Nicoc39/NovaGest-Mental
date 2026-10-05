@@ -182,6 +182,7 @@ formLogin.addEventListener("submit", async (evento) => {
 
         const rolUsuario = datos.usuario.rol;
 
+        configurarMenuPorRol(rolUsuario);
 
 
         btnNuevoProfesional.classList.remove("oculto");
@@ -1803,6 +1804,20 @@ formConsultorio.addEventListener("submit", async (evento) => {
 });
 
 
+function configurarMenuPorRol(rol) {
+
+    const opcionConsultorios =
+        document.querySelector(
+            '.opcion-menu[onclick*="\'seccionConsultorios\'"]'
+        );
+
+    if (rol !== "SUPERADMIN") {
+        opcionConsultorios.classList.add("oculto");
+    } else {
+        opcionConsultorios.classList.remove("oculto");
+    }
+}
+
 /* INICIO */
 
 if (tokenGuardado) {
@@ -1817,6 +1832,8 @@ if (tokenGuardado) {
     }
 
     mostrarAplicacion();
+
+    configurarMenuPorRol(usuario.rol);
 
     cargarConsultorios();
     cargarPacientes();

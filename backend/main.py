@@ -783,11 +783,11 @@ def listar_profesionales(
         cursor.close()
 
 
-    @app.post("/profesionales")
-    def crear_profesional(
-        profesional: Profesional,
-        usuario=Depends(
-            verificar_roles("SUPERADMIN", "ADMINISTRADOR")
+@app.post("/profesionales")
+def crear_profesional(
+    profesional: Profesional,
+    usuario=Depends(
+        verificar_roles("SUPERADMIN", "ADMINISTRADOR")
     )
 ):
     cursor = conexion.cursor()
