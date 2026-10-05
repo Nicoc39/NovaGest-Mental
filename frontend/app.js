@@ -1510,6 +1510,22 @@ const listaObrasSociales =
     document.getElementById("listaObrasSociales");
 
 
+const formularioConsultorio =
+    document.getElementById("formularioConsultorio");
+
+const btnNuevoConsultorio =
+    document.getElementById("btnNuevoConsultorio");
+
+const btnCancelarConsultorio =
+    document.getElementById("btnCancelarConsultorio");
+
+const formConsultorio =
+    document.getElementById("formConsultorio");
+
+const listaConsultorios =
+    document.getElementById("listaConsultorios");
+
+
 btnNuevaObraSocial.addEventListener("click", () => {
 
     formularioObraSocial.classList.remove("oculto");
@@ -1645,6 +1661,147 @@ formObraSocial.addEventListener("submit", async (evento) => {
     }
 });
 
+/* CONSULTORIOS */
+
+btnNuevoConsultorio.addEventListener("click", () => {
+
+    formularioConsultorio.classList.remove("oculto");
+});
+
+
+btnCancelarConsultorio.addEventListener("click", () => {
+
+    formularioConsultorio.classList.add("oculto");
+
+    formConsultorio.reset();
+});
+
+
+async function cargarListaConsultorios() {
+
+    try {
+
+        const respuesta =
+            await apiFetch("/consultorios");
+
+        const consultorios =
+            await respuesta.json();
+
+        listaConsultorios.innerHTML = "";
+
+        if (consultorios.length === 0) {
+
+            listaConsultorios.innerHTML =
+                "<p>No hay consultorios registrados.</p>";
+
+            return;
+        }
+
+        consultorios.forEach(consultorio => {
+
+            const elemento =
+                document.createElement("div");
+
+            elemento.classList.add("tarjeta", "tarjeta-consultorio");
+
+            elemento.innerHTML = `
+                <h3>${consultorio.nombre}</h3>
+
+                <p><strong>Dirección:</strong> ${
+                    consultorio.direccion ||
+                    "No registrada"
+                }</p>
+
+                <p><strong>Teléfono:</strong> ${
+                    consultorio.telefono ||
+                    "No registrado"
+                }</p>
+
+                <p><strong>Email:</strong> ${
+                    consultorio.email ||
+                    "No registrado"
+                }</p>
+            `;
+
+            listaConsultorios.appendChild(elemento);
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        listaConsultorios.innerHTML =
+            "<p>No se pudieron cargar los consultorios.</p>";
+    }
+}
+
+
+formConsultorio.addEventListener("submit", async (evento) => {
+
+    evento.preventDefault();
+
+    const consultorio = {
+
+        nombre:
+            document.getElementById("nombreConsultorio").value,
+
+        direccion:
+            document.getElementById("direccionConsultorio").value ||
+            null,
+
+        telefono:
+            document.getElementById("telefonoConsultorio").value ||
+            null,
+
+        email:
+            document.getElementById("emailConsultorio").value ||
+            null
+    };
+
+    try {
+
+        const respuesta =
+            await apiFetch("/consultorios", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(consultorio)
+            });
+
+        if (!respuesta.ok) {
+
+            const error =
+                await respuesta.json();
+
+            alert(
+                error.detail ||
+                "No se pudo crear el consultorio."
+            );
+
+            return;
+        }
+
+        formConsultorio.reset();
+
+        formularioConsultorio.classList.add("oculto");
+
+        cargarListaConsultorios();
+        cargarConsultorios();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo guardar el consultorio."
+        );
+    }
+});
+
 
 /* INICIO */
 
@@ -1686,6 +1843,7 @@ function cambiarModulo(idSeccion) {
     document.getElementById("seccionSesiones").classList.add("oculto");
     document.getElementById("seccionPagos").classList.add("oculto");
     document.getElementById("seccionObrasSociales").classList.add("oculto");
+    document.getElementById("seccionConsultorios").classList.add("oculto");
 
     document.getElementById(idSeccion).classList.remove("oculto");
 

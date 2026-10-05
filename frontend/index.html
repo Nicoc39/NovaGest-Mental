@@ -517,6 +517,57 @@
 
             </section>
 
+
+            <section id="seccionConsultorios" class="contenedor">
+
+                <div class="titulo">
+                    <h2>Consultorios</h2>
+                    <button id="btnNuevoConsultorio">Nuevo consultorio</button>
+                </div>
+
+                <div id="formularioConsultorio" class="formulario oculto">
+
+                    <h3>Nuevo consultorio</h3>
+
+                    <form id="formConsultorio">
+
+                        <div class="campo">
+                            <label for="nombreConsultorio">Nombre</label>
+                            <input type="text" id="nombreConsultorio" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="direccionConsultorio">Dirección</label>
+                            <input type="text" id="direccionConsultorio">
+                        </div>
+
+                        <div class="campo">
+                            <label for="telefonoConsultorio">Teléfono</label>
+                            <input type="text" id="telefonoConsultorio">
+                        </div>
+
+                        <div class="campo">
+                            <label for="emailConsultorio">Email</label>
+                            <input type="email" id="emailConsultorio">
+                        </div>
+
+                        <div class="botones">
+                            <button type="submit">Guardar consultorio</button>
+                            <button type="button" id="btnCancelarConsultorio">
+                                Cancelar
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div id="listaConsultorios">
+                    <p>Cargando consultorios...</p>
+                </div>
+
+            </section>
+
         </main>
 
     </div>
