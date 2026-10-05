@@ -1667,61 +1667,43 @@ btnCancelarConsultorio.addEventListener("click", () => {
 });
 
 
-async function cargarListaConsultorios() {
+async function cargarConsultorios() {
 
     try {
+        const respuesta = await apiFetch(
+            "/consultorios"
+        );
 
-        const respuesta =
-            await apiFetch("/consultorios");
+        const consultorios = await respuesta.json();
 
-        const consultorios =
-            await respuesta.json();
+        consultorioPaciente.innerHTML =
+            '<option value="">Seleccione un consultorio</option>';
 
-        listaConsultorios.innerHTML = "";
-
-        if (consultorios.length === 0) {
-
-            listaConsultorios.innerHTML =
-                "<p>No hay consultorios registrados.</p>";
-
-            return;
-        }
+        consultorioProfesional.innerHTML =
+            '<option value="">Seleccione un consultorio</option>';
 
         consultorios.forEach(consultorio => {
 
-            const elemento =
-                document.createElement("div");
+            const opcionPaciente = document.createElement("option");
 
-            elemento.classList.add("tarjeta", "tarjeta-consultorio");
+            opcionPaciente.value = consultorio.id_consultorio;
+            opcionPaciente.textContent = consultorio.nombre;
 
-            elemento.innerHTML = `
-                <h3>${consultorio.nombre}</h3>
+            consultorioPaciente.appendChild(opcionPaciente);
 
-                <p><strong>Dirección:</strong> ${
-                    consultorio.direccion ||
-                    "No registrada"
-                }</p>
 
-                <p><strong>Teléfono:</strong> ${
-                    consultorio.telefono ||
-                    "No registrado"
-                }</p>
+            const opcionProfesional = document.createElement("option");
 
-                <p><strong>Email:</strong> ${
-                    consultorio.email ||
-                    "No registrado"
-                }</p>
-            `;
+            opcionProfesional.value = consultorio.id_consultorio;
+            opcionProfesional.textContent = consultorio.nombre;
 
-            listaConsultorios.appendChild(elemento);
+            consultorioProfesional.appendChild(opcionProfesional);
         });
 
+        cargarListaConsultorios();
+
     } catch (error) {
-
-        console.error(error);
-
-        listaConsultorios.innerHTML =
-            "<p>No se pudieron cargar los consultorios.</p>";
+        console.error("Error al cargar consultorios:", error);
     }
 }
 
