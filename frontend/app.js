@@ -170,6 +170,8 @@ formLogin.addEventListener("submit", async (evento) => {
 
         const rolUsuario = datos.usuario.rol;
 
+        configurarMenuPorRol(rolUsuario);
+
         document.querySelectorAll(".opcion-menu").forEach(opcion => {
 
             if (opcion.textContent.trim() === "Consultorios") {
