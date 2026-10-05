@@ -1885,6 +1885,17 @@ function configurarMenuPorRol(rol) {
                 enlace.classList.remove("oculto");
             }
         }
+
+                if (
+            enlace.textContent.trim() === "Sesiones"
+        ) {
+
+            if (rol === "ADMINISTRATIVO") {
+                enlace.classList.add("oculto");
+            } else {
+                enlace.classList.remove("oculto");
+            }
+        }
     });
 }
 
