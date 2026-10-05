@@ -132,8 +132,6 @@ formLogin.addEventListener("submit", async (evento) => {
     const email = document.getElementById("emailLogin").value;
     const password = document.getElementById("passwordLogin").value;
 
-
-
     mensajeLogin.textContent = "";
 
     try {
@@ -151,7 +149,6 @@ formLogin.addEventListener("submit", async (evento) => {
 
         const datos = await respuesta.json();
 
-
         if (!respuesta.ok) {
             mensajeLogin.textContent =
                 datos.detail || "Email o contraseña incorrectos";
@@ -165,15 +162,6 @@ formLogin.addEventListener("submit", async (evento) => {
             "usuario",
             JSON.stringify(datos.usuario)
         );
-
-
-
-        usuarioConectado.textContent =
-            datos.usuario.nombre + " " +
-            datos.usuario.apellido + " — " +
-            datos.usuario.rol;
-
-
 
         usuarioConectado.textContent =
             datos.usuario.nombre + " " +
@@ -194,7 +182,6 @@ formLogin.addEventListener("submit", async (evento) => {
             }
         });
 
-
         btnNuevoProfesional.classList.remove("oculto");
 
         if (
@@ -204,12 +191,10 @@ formLogin.addEventListener("submit", async (evento) => {
             btnNuevoProfesional.classList.add("oculto");
         }
 
-
+        mostrarAplicacion();
 
         cargarConsultorios();
-
-
-
+        cargarListaConsultorios();
         cargarPacientes();
         cargarProfesionales();
         cargarTurnos();
