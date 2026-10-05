@@ -92,6 +92,12 @@ app.add_middleware(
 )
 
 
+class Consultorio(BaseModel):
+    nombre: str
+    direccion: str | None = None
+    telefono: str | None = None
+    email: str | None = None
+
 class Paciente(BaseModel):
     id_consultorio: int
     nombre: str
@@ -217,6 +223,47 @@ def listar_consultorios(
             })
 
         return respuesta
+
+    finally:
+        cursor.close()
+
+
+@app.post("/consultorios")
+def crear_consultorio(
+    consultorio: Consultorio,
+    usuario=Depends(verificar_roles("SUPERADMIN"))
+):
+    cursor = conexion.cursor()
+
+    try:
+        cursor.execute("""
+            INSERT INTO consultorio
+            (nombre, direccion, telefono, email)
+            VALUES (%s, %s, %s, %s)
+            RETURNING id_consultorio;
+        """, (
+            consultorio.nombre,
+            consultorio.direccion,
+            consultorio.telefono,
+            consultorio.email
+        ))
+
+        id_nuevo = cursor.fetchone()[0]
+
+        conexion.commit()
+
+        return {
+            "mensaje": "Consultorio creado correctamente",
+            "id_consultorio": id_nuevo
+        }
+
+    except Exception as error:
+        conexion.rollback()
+
+        raise HTTPException(
+            status_code=400,
+            detail=str(error)
+        )
 
     finally:
         cursor.close()
