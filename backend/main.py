@@ -906,7 +906,14 @@ class Turno(BaseModel):
 
 @app.get("/turnos")
 def listar_turnos(
-    usuario=Depends(obtener_usuario_actual)
+    usuario=Depends(
+        verificar_roles(
+            "SUPERADMIN",
+            "ADMINISTRADOR",
+            "ADMINISTRATIVO",
+            "PROFESIONAL"
+        )
+    )
 ):
     cursor = conexion.cursor()
 
