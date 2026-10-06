@@ -1311,7 +1311,7 @@ async function cargarProximosTurnos() {
         const proximos =
             turnos
                 .filter(turno =>
-                    turno.fecha >= fechaHoy &&
+                    String(turno.fecha).substring(0, 10) >= fechaHoy &&
                     turno.estado !== "CANCELADO"
                 )
                 .sort((a, b) => {
@@ -1338,26 +1338,16 @@ async function cargarProximosTurnos() {
 
         proximos.forEach(turno => {
 
-            const partesFecha =
-                turno.fecha.split("-");
-
-            const fechaFormateada =
-                new Date(
-                    Number(partesFecha[0]),
-                    Number(partesFecha[1]) - 1,
-                    Number(partesFecha[2])
-                );
-
-            const opcionesFecha = {
-                weekday: "long",
-                day: "numeric",
-                month: "long"
-            };
-
             const fechaTexto =
-                fechaFormateada.toLocaleDateString(
+                new Date(
+                    turno.fecha + "T00:00:00"
+                ).toLocaleDateString(
                     "es-AR",
-                    opcionesFecha
+                    {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long"
+                    }
                 );
 
             const fechaCapitalizada =
@@ -1365,7 +1355,7 @@ async function cargarProximosTurnos() {
                 fechaTexto.slice(1);
 
             const hora =
-                turno.hora_inicio.substring(0, 5);
+                String(turno.hora_inicio).substring(0, 5);
 
             const elemento =
                 document.createElement("div");
