@@ -96,6 +96,10 @@
                     Consultorios
                 </a>
 
+                <a href="#" class="opcion-menu" onclick="cambiarModulo('seccionUsuarios'); return false;">
+                    Usuarios
+                </a>
+
             </nav>
 
         </header>
@@ -568,6 +572,73 @@
 
                 <div id="listaConsultorios">
                     <p>Cargando consultorios...</p>
+                </div>
+
+            </section>
+
+
+            <section id="seccionUsuarios" class="contenedor">
+
+                <div class="titulo">
+                    <h2>Usuarios</h2>
+                    <button id="btnNuevoUsuario">Nuevo usuario</button>
+                </div>
+
+                <div id="formularioUsuario" class="formulario oculto">
+
+                    <h3>Nuevo usuario</h3>
+
+                    <form id="formUsuario">
+
+                        <div class="campo">
+                            <label for="nombreUsuario">Nombre</label>
+                            <input type="text" id="nombreUsuario" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="apellidoUsuario">Apellido</label>
+                            <input type="text" id="apellidoUsuario" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="emailUsuario">Email</label>
+                            <input type="email" id="emailUsuario" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="passwordUsuario">Contraseña</label>
+                            <input type="password" id="passwordUsuario" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="rolUsuario">Rol</label>
+                            <select id="rolUsuario" required>
+                                <option value="">Seleccionar rol</option>
+                                <option value="ADMINISTRADOR">Administrador</option>
+                                <option value="ADMINISTRATIVO">Administrativo</option>
+                            </select>
+                        </div>
+
+                        <div class="campo">
+                            <label for="consultorioUsuario">Consultorio</label>
+                            <select id="consultorioUsuario" required>
+                                <option value="">Cargando consultorios...</option>
+                            </select>
+                        </div>
+
+                        <div class="botones">
+                            <button type="submit">Guardar usuario</button>
+                            <button type="button" id="btnCancelarUsuario">
+                                Cancelar
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div id="listaUsuarios">
+                    <p>Cargando usuarios...</p>
                 </div>
 
             </section>

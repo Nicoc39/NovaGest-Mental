@@ -117,6 +117,15 @@ class Profesional(BaseModel):
     especialidad: str | None = None
     id_consultorio: int
 
+
+class Usuario(BaseModel):
+    nombre: str
+    apellido: str
+    email: str
+    password: str
+    rol: str
+    id_consultorio: int
+
 class Login(BaseModel):
     email: str
     password: str
@@ -893,6 +902,148 @@ def crear_profesional(
 
     finally:
         cursor.close()
+
+@app.get("/usuarios")
+def listar_usuarios(
+    usuario=Depends(
+        verificar_roles("SUPERADMIN", "ADMINISTRADOR")
+    )
+):
+    cursor = conexion.cursor()
+
+    try:
+        cursor.execute("""
+            SELECT
+                u.id_usuario,
+                u.nombre,
+                u.apellido,
+                u.email,
+                u.rol,
+                u.activo
+            FROM usuario u
+            INNER JOIN consultorio_usuario cu
+                ON cu.id_usuario = u.id_usuario
+            WHERE cu.id_consultorio = ANY(%s)
+            ORDER BY u.apellido, u.nombre;
+        """, (
+            obtener_consultorios_usuario(usuario),
+        ))
+
+        usuarios = cursor.fetchall()
+
+        return [
+            {
+                "id_usuario": fila[0],
+                "nombre": fila[1],
+                "apellido": fila[2],
+                "email": fila[3],
+                "rol": fila[4],
+                "activo": fila[5]
+            }
+            for fila in usuarios
+        ]
+
+    finally:
+        cursor.close()
+
+@app.post("/usuarios")
+def crear_usuario(
+    usuario_nuevo: Usuario,
+    usuario=Depends(
+        verificar_roles("SUPERADMIN", "ADMINISTRADOR")
+    )
+):
+    cursor = conexion.cursor()
+
+    try:
+        consultorios = obtener_consultorios_usuario(usuario)
+
+        if usuario_nuevo.id_consultorio not in consultorios:
+            raise HTTPException(
+                status_code=403,
+                detail="No tenés acceso a este consultorio"
+            )
+
+        if usuario_nuevo.rol not in [
+            "ADMINISTRADOR",
+            "ADMINISTRATIVO"
+        ]:
+            raise HTTPException(
+                status_code=400,
+                detail="Rol no permitido para este registro"
+            )
+
+        if (
+            usuario["rol"] == "ADMINISTRADOR"
+            and usuario_nuevo.rol == "ADMINISTRADOR"
+        ):
+            raise HTTPException(
+                status_code=403,
+                detail="Un administrador no puede crear otro administrador"
+            )
+
+        cursor.execute("""
+            SELECT id_usuario
+            FROM usuario
+            WHERE email = %s;
+        """, (
+            usuario_nuevo.email,
+        ))
+
+        usuario_existente = cursor.fetchone()
+
+        if usuario_existente is not None:
+            raise HTTPException(
+                status_code=400,
+                detail="Ya existe un usuario con ese email"
+            )
+
+        cursor.execute("""
+            INSERT INTO usuario
+            (nombre, apellido, email, password_hash, rol)
+            VALUES (%s, %s, %s, %s, %s)
+            RETURNING id_usuario;
+        """, (
+            usuario_nuevo.nombre,
+            usuario_nuevo.apellido,
+            usuario_nuevo.email,
+            generar_hash(usuario_nuevo.password),
+            usuario_nuevo.rol
+        ))
+
+        id_usuario = cursor.fetchone()[0]
+
+        cursor.execute("""
+            INSERT INTO consultorio_usuario
+            (id_consultorio, id_usuario)
+            VALUES (%s, %s);
+        """, (
+            usuario_nuevo.id_consultorio,
+            id_usuario
+        ))
+
+        conexion.commit()
+
+        return {
+            "mensaje": "Usuario creado correctamente",
+            "id_usuario": id_usuario
+        }
+
+    except HTTPException:
+        conexion.rollback()
+        raise
+
+    except Exception as error:
+        conexion.rollback()
+
+        raise HTTPException(
+            status_code=400,
+            detail=str(error)
+        )
+
+    finally:
+        cursor.close()
+
 
 class Turno(BaseModel):
     id_paciente: int

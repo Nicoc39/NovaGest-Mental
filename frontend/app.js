@@ -54,6 +54,9 @@ async function cargarConsultorios() {
         consultorioProfesional.innerHTML =
             '<option value="">Seleccione un consultorio</option>';
 
+        consultorioUsuario.innerHTML =
+            '<option value="">Seleccione un consultorio</option>';
+
         consultorios.forEach(consultorio => {
 
             const opcionPaciente = document.createElement("option");
@@ -70,7 +73,17 @@ async function cargarConsultorios() {
             opcionProfesional.textContent = consultorio.nombre;
 
             consultorioProfesional.appendChild(opcionProfesional);
+
+
+            const opcionUsuario = document.createElement("option");
+
+            opcionUsuario.value = consultorio.id_consultorio;
+            opcionUsuario.textContent = consultorio.nombre;
+
+            consultorioUsuario.appendChild(opcionUsuario);
         });
+
+        cargarListaConsultorios();
 
     } catch (error) {
         console.error("Error al cargar consultorios:", error);
@@ -1517,6 +1530,27 @@ const formConsultorio =
 const listaConsultorios =
     document.getElementById("listaConsultorios");
 
+const formularioUsuario =
+    document.getElementById("formularioUsuario");
+
+const btnNuevoUsuario =
+    document.getElementById("btnNuevoUsuario");
+
+const btnCancelarUsuario =
+    document.getElementById("btnCancelarUsuario");
+
+const formUsuario =
+    document.getElementById("formUsuario");
+
+const listaUsuarios =
+    document.getElementById("listaUsuarios");
+
+const rolUsuario =
+    document.getElementById("rolUsuario");
+
+const consultorioUsuario =
+    document.getElementById("consultorioUsuario");
+
 
 btnNuevaObraSocial.addEventListener("click", () => {
 
@@ -1668,6 +1702,18 @@ btnCancelarConsultorio.addEventListener("click", () => {
     formConsultorio.reset();
 });
 
+btnNuevoUsuario.addEventListener("click", () => {
+
+    formularioUsuario.classList.remove("oculto");
+});
+
+
+btnCancelarUsuario.addEventListener("click", () => {
+
+    formularioUsuario.classList.add("oculto");
+
+    formUsuario.reset();
+});
 
 async function cargarConsultorios() {
 
@@ -1767,6 +1813,63 @@ async function cargarListaConsultorios() {
     }
 }
 
+async function cargarUsuarios() {
+
+    try {
+
+        const respuesta =
+            await apiFetch("/usuarios");
+
+        const usuarios =
+            await respuesta.json();
+
+        listaUsuarios.innerHTML = "";
+
+        if (usuarios.length === 0) {
+
+            listaUsuarios.innerHTML =
+                "<p>No hay usuarios registrados.</p>";
+
+            return;
+        }
+
+        usuarios.forEach(usuario => {
+
+            const elemento =
+                document.createElement("div");
+
+            elemento.classList.add("tarjeta", "tarjeta-usuario");
+
+            elemento.innerHTML = `
+                <h3>${usuario.nombre} ${usuario.apellido}</h3>
+
+                <p>
+                    <strong>Email:</strong>
+                    ${usuario.email}
+                </p>
+
+                <p>
+                    <strong>Rol:</strong>
+                    ${usuario.rol}
+                </p>
+
+                <p>
+                    <strong>Estado:</strong>
+                    ${usuario.activo ? "Activo" : "Inactivo"}
+                </p>
+            `;
+
+            listaUsuarios.appendChild(elemento);
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        listaUsuarios.innerHTML =
+            "<p>No se pudieron cargar los usuarios.</p>";
+    }
+}
 
 formConsultorio.addEventListener("submit", async (evento) => {
 
@@ -1834,6 +1937,73 @@ formConsultorio.addEventListener("submit", async (evento) => {
     }
 });
 
+formUsuario.addEventListener("submit", async (evento) => {
+
+    evento.preventDefault();
+
+    const usuario = {
+
+        nombre:
+            document.getElementById("nombreUsuario").value,
+
+        apellido:
+            document.getElementById("apellidoUsuario").value,
+
+        email:
+            document.getElementById("emailUsuario").value,
+
+        password:
+            document.getElementById("passwordUsuario").value,
+
+        rol:
+            rolUsuario.value,
+
+        id_consultorio:
+            Number(consultorioUsuario.value)
+    };
+
+    try {
+
+        const respuesta =
+            await apiFetch("/usuarios", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(usuario)
+            });
+
+        if (!respuesta.ok) {
+
+            const error =
+                await respuesta.json();
+
+            alert(
+                error.detail ||
+                "No se pudo crear el usuario."
+            );
+
+            return;
+        }
+
+        formUsuario.reset();
+
+        formularioUsuario.classList.add("oculto");
+
+        alert("Usuario creado correctamente.");
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo guardar el usuario."
+        );
+    }
+});
 
 function configurarMenuPorRol(rol) {
 
@@ -1864,7 +2034,7 @@ function configurarMenuPorRol(rol) {
             }
         }
 
-                if (
+        if (
             enlace.textContent.trim() === "Pagos"
         ) {
 
@@ -1875,7 +2045,7 @@ function configurarMenuPorRol(rol) {
             }
         }
 
-                if (
+        if (
             enlace.textContent.trim() === "Obras sociales"
         ) {
 
@@ -1886,11 +2056,25 @@ function configurarMenuPorRol(rol) {
             }
         }
 
-                if (
+        if (
             enlace.textContent.trim() === "Sesiones"
         ) {
 
             if (rol === "ADMINISTRATIVO") {
+                enlace.classList.add("oculto");
+            } else {
+                enlace.classList.remove("oculto");
+            }
+        }
+
+        if (
+            enlace.textContent.trim() === "Usuarios"
+        ) {
+
+            if (
+                rol !== "SUPERADMIN" &&
+                rol !== "ADMINISTRADOR"
+            ) {
                 enlace.classList.add("oculto");
             } else {
                 enlace.classList.remove("oculto");
@@ -1930,6 +2114,13 @@ if (tokenGuardado) {
         cargarObrasSociales();
     }
 
+    if (
+        rolGuardado === "SUPERADMIN" ||
+        rolGuardado === "ADMINISTRADOR"
+    ) {
+        cargarUsuarios();
+    }
+
 } else {
 
     mostrarLogin();
@@ -1947,6 +2138,7 @@ function cambiarModulo(idSeccion) {
     document.getElementById("seccionPagos").classList.add("oculto");
     document.getElementById("seccionObrasSociales").classList.add("oculto");
     document.getElementById("seccionConsultorios").classList.add("oculto");
+    document.getElementById("seccionUsuarios").classList.add("oculto");
 
     document.getElementById(idSeccion).classList.remove("oculto");
 
@@ -1959,7 +2151,3 @@ function cambiarModulo(idSeccion) {
     ).classList.add("activo");
 
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-    cambiarModulo("seccionPacientes");
-});
