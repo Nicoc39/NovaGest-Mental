@@ -1832,6 +1832,21 @@ async function cargarSesiones() {
 
         window.sesionesCargadas = sesiones;
 
+        const respuestaObras =
+            await apiFetch("/obras-sociales");
+
+        const obrasSociales =
+            await respuestaObras.json();
+
+        const nombresObrasSociales = {};
+
+        obrasSociales.forEach(obraSocial => {
+
+            nombresObrasSociales[
+                obraSocial.id_obra_social
+            ] = obraSocial.nombre;
+        });
+
         listaSesiones.innerHTML = "";
 
         if (sesiones.length === 0) {
@@ -1851,6 +1866,15 @@ async function cargarSesiones() {
                 "tarjeta",
                 "tarjeta-sesion"
             );
+
+            const nombreObraSocial =
+                sesion.id_obra_social
+                    ? (
+                        nombresObrasSociales[
+                            sesion.id_obra_social
+                        ] || "Particular"
+                    )
+                    : "Particular";
 
             elemento.innerHTML = `
                 <div class="cabecera-tarjeta">
@@ -1877,7 +1901,7 @@ async function cargarSesiones() {
 
                     <p>
                         <strong>Obra social:</strong>
-                        ${sesion.id_obra_social || "Particular"}
+                        ${nombreObraSocial}
                     </p>
 
                     <button
@@ -1898,6 +1922,7 @@ async function cargarSesiones() {
                 elemento.querySelector(".btn-editar-sesion");
 
             botonEditar.addEventListener("click", event => {
+
                 event.stopPropagation();
 
                 editarSesion(sesion);
