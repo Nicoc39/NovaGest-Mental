@@ -207,6 +207,8 @@ formLogin.addEventListener("submit", async (evento) => {
 
         mostrarAplicacion();
 
+        cambiarModulo("seccionDashboard");
+
         cargarConsultorios();
         cargarListaConsultorios();
         cargarPacientes();
@@ -2716,7 +2718,7 @@ function configurarMenuPorRol(rol) {
     });
 }
 
-/* INICIO */
+ /* INICIO */
 
 if (tokenGuardado) {
 
@@ -2730,6 +2732,8 @@ if (tokenGuardado) {
     }
 
     mostrarAplicacion();
+
+    cambiarModulo("seccionDashboard");
 
     const rolGuardado = localStorage.getItem("rol");
 
