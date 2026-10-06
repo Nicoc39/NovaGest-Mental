@@ -669,9 +669,108 @@ async function confirmarEdicion() {
             return;
         }
 
-        alert(
-            "Esta edición todavía no está configurada."
-        );
+        if (tipoEdicionActual === "sesion") {
+
+            const datosSesion = {
+
+                id_turno:
+                    datosEdicionActual.id_turno,
+
+                fecha:
+                    datos.fecha,
+
+                observaciones:
+                    datos.observaciones.trim() || null,
+
+                id_obra_social:
+                    datos.id_obra_social.trim() === ""
+                        ? null
+                        : Number(datos.id_obra_social)
+            };
+
+            const respuesta =
+                await apiFetch(
+                    "/sesiones/" +
+                    datosEdicionActual.id,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify(
+                            datosSesion
+                        )
+                    }
+                );
+
+            if (!respuesta.ok) {
+
+                const error =
+                    await respuesta.json();
+
+                alert(
+                    error.detail ||
+                    "No se pudo modificar la sesión."
+                );
+
+                return;
+            }
+
+            cerrarModalEdicion();
+
+            await cargarSesiones();
+            await cargarHistorias();
+
+            return;
+        }
+
+        if (tipoEdicionActual === "usuario") {
+
+            const respuesta =
+                await apiFetch(
+                    "/usuarios/" +
+                    datosEdicionActual.id,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            nombre:
+                                datos.nombre.trim(),
+
+                            apellido:
+                                datos.apellido.trim(),
+
+                            email:
+                                datos.email.trim()
+                        })
+                    }
+                );
+
+            if (!respuesta.ok) {
+
+                const error =
+                    await respuesta.json();
+
+                alert(
+                    error.detail ||
+                    "No se pudo modificar el usuario."
+                );
+
+                return;
+            }
+
+            cerrarModalEdicion();
+
+            await cargarUsuarios();
+
+            return;
+        }
 
     } catch (error) {
 
@@ -742,91 +841,37 @@ async function editarPaciente(id) {
 
 async function editarSesion(sesion) {
 
-    const fecha =
-        prompt(
-            "Nueva fecha:",
-            sesion.fecha
-        );
-
-    if (fecha === null || fecha.trim() === "") {
-        return;
-    }
-
-    const observaciones =
-        prompt(
-            "Nuevas observaciones:",
-            sesion.observaciones || ""
-        );
-
-    if (observaciones === null) {
-        return;
-    }
-
-    const idObraSocial =
-        prompt(
-            "Nuevo ID de obra social (dejar vacío para particular):",
-            sesion.id_obra_social || ""
-        );
-
-    if (idObraSocial === null) {
-        return;
-    }
-
-    try {
-
-        const datosSesion = {
-
-            id_turno: sesion.id_turno,
-
-            fecha: fecha,
-
-            observaciones:
-                observaciones.trim() || null,
-
-            id_obra_social:
-                idObraSocial.trim() === ""
-                    ? null
-                    : Number(idObraSocial)
-
-        };
-
-        const respuesta =
-            await apiFetch(
-                "/sesiones/" + sesion.id_sesion,
-                {
-
-                    method: "PUT",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify(datosSesion)
-                }
-            );
-
-        if (!respuesta.ok) {
-
-            const error =
-                await respuesta.json();
-
-            alert(
-                error.detail ||
-                "No se pudo modificar la sesión."
-            );
-
-            return;
+    abrirModalEdicion(
+        "Editar sesión",
+        [
+            {
+                id: "fecha",
+                label: "Fecha",
+                tipo: "date",
+                valor: sesion.fecha,
+                required: true
+            },
+            {
+                id: "observaciones",
+                label: "Observaciones",
+                tipo: "text",
+                valor: sesion.observaciones || "",
+                required: false
+            },
+            {
+                id: "id_obra_social",
+                label: "ID de obra social",
+                tipo: "number",
+                valor: sesion.id_obra_social || "",
+                required: false
+            }
+        ],
+        "sesion",
+        {
+            id: sesion.id_sesion,
+            id_turno: sesion.id_turno
         }
-
-        await cargarSesiones();
-        await cargarHistorias();
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert("No se pudo modificar la sesión.");
-    }
+    );
 }
 
 
@@ -2533,7 +2578,7 @@ async function cargarUsuarios() {
                     <div class="acciones">
 
                         <button
-                            onclick="editarUsuario(${usuario.id_usuario}); event.stopPropagation();">
+                            onclick='editarUsuario(${JSON.stringify(usuario)}); event.stopPropagation();'>
                             Editar
                         </button>
 
@@ -2566,67 +2611,38 @@ async function cargarUsuarios() {
     }
 }
 
-async function editarUsuario(id) {
+async function editarUsuario(usuario) {
 
-    const nombre = prompt("Nuevo nombre:");
-
-    if (nombre === null || nombre.trim() === "") {
-        return;
-    }
-
-    const apellido = prompt("Nuevo apellido:");
-
-    if (apellido === null || apellido.trim() === "") {
-        return;
-    }
-
-    const email = prompt("Nuevo email:");
-
-    if (email === null || email.trim() === "") {
-        return;
-    }
-
-    try {
-
-        const respuesta =
-            await apiFetch("/usuarios/" + id, {
-
-                method: "PUT",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    nombre: nombre.trim(),
-                    apellido: apellido.trim(),
-                    email: email.trim()
-                })
-            });
-
-        if (!respuesta.ok) {
-
-            const error =
-                await respuesta.json();
-
-            alert(
-                error.detail ||
-                "No se pudo modificar el usuario."
-            );
-
-            return;
+    abrirModalEdicion(
+        "Editar usuario",
+        [
+            {
+                id: "nombre",
+                label: "Nombre",
+                tipo: "text",
+                valor: usuario.nombre,
+                required: true
+            },
+            {
+                id: "apellido",
+                label: "Apellido",
+                tipo: "text",
+                valor: usuario.apellido,
+                required: true
+            },
+            {
+                id: "email",
+                label: "Email",
+                tipo: "email",
+                valor: usuario.email,
+                required: true
+            }
+        ],
+        "usuario",
+        {
+            id: usuario.id_usuario
         }
-
-        cargarUsuarios();
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert(
-            "No se pudo modificar el usuario."
-        );
-    }
+    );
 }
 
 
