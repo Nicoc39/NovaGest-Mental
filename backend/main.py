@@ -1475,6 +1475,7 @@ def listar_sesiones(
         cursor.execute("""
             SELECT s.id_sesion,
                    s.id_turno,
+                   p.id_paciente,
                    s.fecha,
                    s.observaciones,
                    s.id_obra_social,
@@ -1503,11 +1504,12 @@ def listar_sesiones(
             resultado.append({
                 "id_sesion": sesion[0],
                 "id_turno": sesion[1],
-                "fecha": sesion[2],
-                "observaciones": sesion[3],
-                "id_obra_social": sesion[4],
-                "paciente": sesion[5] + " " + sesion[6],
-                "profesional": sesion[7] + " " + sesion[8]
+                "id_paciente": sesion[2],
+                "fecha": sesion[3],
+                "observaciones": sesion[4],
+                "id_obra_social": sesion[5],
+                "paciente": sesion[6] + " " + sesion[7],
+                "profesional": sesion[8] + " " + sesion[9]
             })
 
         return resultado
