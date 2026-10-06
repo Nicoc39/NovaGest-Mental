@@ -841,37 +841,79 @@ async function editarPaciente(id) {
 
 async function editarSesion(sesion) {
 
-    abrirModalEdicion(
-        "Editar sesión",
-        [
-            {
-                id: "fecha",
-                label: "Fecha",
-                tipo: "date",
-                valor: sesion.fecha,
-                required: true
-            },
-            {
-                id: "observaciones",
-                label: "Observaciones",
-                tipo: "text",
-                valor: sesion.observaciones || "",
-                required: false
-            },
-            {
-                id: "id_obra_social",
-                label: "ID de obra social",
-                tipo: "number",
-                valor: sesion.id_obra_social || "",
-                required: false
-            }
-        ],
-        "sesion",
-        {
-            id: sesion.id_sesion,
-            id_turno: sesion.id_turno
+    try {
+
+        const respuesta =
+            await apiFetch("/obras-sociales");
+
+        if (!respuesta.ok) {
+
+            alert(
+                "No se pudieron cargar las obras sociales."
+            );
+
+            return;
         }
-    );
+
+        const obrasSociales =
+            await respuesta.json();
+
+        const opcionesObraSocial = [
+
+            {
+                value: "",
+                texto: "Particular"
+            },
+
+            ...obrasSociales
+                .filter(obraSocial => obraSocial.activo)
+                .map(obraSocial => ({
+                    value: obraSocial.id_obra_social,
+                    texto: obraSocial.nombre
+                }))
+        ];
+
+        abrirModalEdicion(
+            "Editar sesión",
+            [
+                {
+                    id: "fecha",
+                    label: "Fecha",
+                    tipo: "date",
+                    valor: sesion.fecha,
+                    required: true
+                },
+                {
+                    id: "observaciones",
+                    label: "Observaciones",
+                    tipo: "text",
+                    valor: sesion.observaciones || "",
+                    required: false
+                },
+                {
+                    id: "id_obra_social",
+                    label: "Obra social",
+                    tipo: "select",
+                    valor: sesion.id_obra_social || "",
+                    opciones: opcionesObraSocial,
+                    required: false
+                }
+            ],
+            "sesion",
+            {
+                id: sesion.id_sesion,
+                id_turno: sesion.id_turno
+            }
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudieron cargar las obras sociales."
+        );
+    }
 }
 
 
