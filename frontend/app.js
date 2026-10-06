@@ -651,6 +651,12 @@ async function cargarHistorias() {
         const historias =
             await respuesta.json();
 
+        const respuestaSesiones =
+            await apiFetch("/sesiones");
+
+        const sesiones =
+            await respuestaSesiones.json();
+
         listaHistorias.innerHTML = "";
 
         if (historias.length === 0) {
@@ -666,13 +672,86 @@ async function cargarHistorias() {
             const elemento =
                 document.createElement("div");
 
-            elemento.classList.add("tarjeta", "tarjeta-historia");
+            elemento.classList.add(
+                "tarjeta",
+                "tarjeta-historia"
+            );
+
+            const sesionesPaciente =
+                sesiones.filter(
+                    sesion =>
+                        Number(sesion.id_paciente) ===
+                        Number(historia.id_paciente)
+                );
+
+            let sesionesHTML = "";
+
+            if (sesionesPaciente.length === 0) {
+
+                sesionesHTML = `
+                    <p class="sin-sesiones">
+                        No hay sesiones registradas.
+                    </p>
+                `;
+
+            } else {
+
+                sesionesHTML = `
+                    <div class="sesiones-historia">
+
+                        <h4>Sesiones</h4>
+
+                        ${sesionesPaciente.map(sesion => `
+                            <div class="sesion-historia">
+
+                                <p>
+                                    <strong>Fecha:</strong>
+                                    ${sesion.fecha}
+                                </p>
+
+                                <p>
+                                    <strong>Profesional:</strong>
+                                    ${sesion.profesional}
+                                </p>
+
+                                <p>
+                                    <strong>Observaciones:</strong>
+                                    ${sesion.observaciones || "Sin observaciones"}
+                                </p>
+
+                            </div>
+                        `).join("")}
+
+                    </div>
+                `;
+            }
 
             elemento.innerHTML = `
-                <h3>${historia.paciente}</h3>
-                <p><strong>Fecha de apertura:</strong> ${historia.fecha_apertura}</p>
-                <p><strong>Observaciones:</strong> ${historia.observaciones || "Sin observaciones"}</p>
+                <div class="cabecera-tarjeta">
+                    <h3>${historia.paciente}</h3>
+                    <span class="flecha-tarjeta">›</span>
+                </div>
+
+                <div class="detalle-tarjeta">
+
+                    <p>
+                        <strong>Fecha de apertura:</strong>
+                        ${historia.fecha_apertura}
+                    </p>
+
+                    <p>
+                        <strong>Observaciones:</strong>
+                        ${historia.observaciones || "Sin observaciones"}
+                    </p>
+
+                    ${sesionesHTML}
+
+                </div>
             `;
+
+            elemento.addEventListener("click", () => {
+                elemento.classList.toggle("expandida");
+            });
 
             listaHistorias.appendChild(elemento);
         });
@@ -685,7 +764,6 @@ async function cargarHistorias() {
             "<p>No se pudieron cargar las historias clínicas.</p>";
     }
 }
-
 
 formHistoria.addEventListener("submit", async (evento) => {
 
@@ -1284,6 +1362,19 @@ async function cargarSesiones() {
 
         const sesiones =
             await respuesta.json();
+
+        sesiones.forEach(sesion => {
+            console.log(
+                "ID SESION:",
+                sesion.id_sesion,
+                "ID PACIENTE:",
+                sesion.id_paciente,
+                "PACIENTE:",
+                sesion.paciente
+            );
+        });
+
+        window.sesionesCargadas = sesiones;
 
         listaSesiones.innerHTML = "";
 
