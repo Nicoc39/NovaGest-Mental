@@ -212,6 +212,7 @@ formLogin.addEventListener("submit", async (evento) => {
         cargarPacientes();
         cargarProfesionales();
         cargarTurnos();
+        cargarProximosTurnos();
         cargarSesiones();
         cargarPagos();
         cargarObrasSociales();
@@ -1280,6 +1281,111 @@ async function cargarTurnos() {
     }
 }
 
+async function cargarProximosTurnos() {
+
+    const contenedor =
+        document.getElementById("proximosTurnos");
+
+    if (!contenedor) {
+        return;
+    }
+
+    try {
+
+        const respuesta =
+            await apiFetch("/turnos");
+
+        const turnos =
+            await respuesta.json();
+
+        const hoy =
+            new Date();
+
+        const fechaHoy =
+            hoy.getFullYear() + "-" +
+            String(hoy.getMonth() + 1).padStart(2, "0") + "-" +
+            String(hoy.getDate()).padStart(2, "0");
+
+        const proximos =
+            turnos
+                .filter(turno =>
+                    turno.fecha >= fechaHoy &&
+                    turno.estado !== "CANCELADO"
+                )
+                .sort((a, b) => {
+
+                    const fechaA =
+                        `${a.fecha} ${a.hora_inicio}`;
+
+                    const fechaB =
+                        `${b.fecha} ${b.hora_inicio}`;
+
+                    return fechaA.localeCompare(fechaB);
+                })
+                .slice(0, 5);
+
+        contenedor.innerHTML = "";
+
+        if (proximos.length === 0) {
+
+            contenedor.innerHTML =
+                "<p>No hay próximos turnos registrados.</p>";
+
+            return;
+        }
+
+        proximos.forEach(turno => {
+
+            const elemento =
+                document.createElement("div");
+
+            elemento.classList.add(
+                "proximo-turno"
+            );
+
+            elemento.innerHTML = `
+                <div class="proximo-turno-fecha">
+
+                    <strong>${turno.fecha}</strong>
+
+                    <span>
+                        ${turno.hora_inicio} hs
+                    </span>
+
+                </div>
+
+                <div class="proximo-turno-datos">
+
+                    <strong>
+                        ${turno.paciente}
+                    </strong>
+
+                    <span>
+                        ${turno.profesional}
+                    </span>
+
+                </div>
+
+                <div class="proximo-turno-estado">
+
+                    <span class="estado-turno estado-${turno.estado.toLowerCase()}">
+                        ${turno.estado}
+                    </span>
+
+                </div>
+            `;
+
+            contenedor.appendChild(elemento);
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        contenedor.innerHTML =
+            "<p>No se pudieron cargar los próximos turnos.</p>";
+    }
+}
 
 formTurno.addEventListener("submit", async (evento) => {
 
@@ -2633,6 +2739,7 @@ if (tokenGuardado) {
     cargarPacientes();
     cargarProfesionales();
     cargarTurnos();
+    cargarProximosTurnos();
     cargarSesiones();
     cargarHistorias();
 
@@ -2657,6 +2764,7 @@ if (tokenGuardado) {
 
 function cambiarModulo(idSeccion) {
 
+    document.getElementById("seccionDashboard").classList.add("oculto");
     document.getElementById("seccionPacientes").classList.add("oculto");
     document.getElementById("seccionHistorias").classList.add("oculto");
     document.getElementById("seccionProfesionales").classList.add("oculto");

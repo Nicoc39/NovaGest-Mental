@@ -593,6 +593,97 @@ grid-column: 1 / -1;
 }
 
 /* =================================
+DASHBOARD
+================================= */
+
+.tarjeta-dashboard {
+    padding: 20px;
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    box-shadow: var(--sombra);
+}
+
+.cabecera-dashboard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--borde);
+}
+
+.cabecera-dashboard h3 {
+    color: var(--azul-oscuro);
+    font-size: 17px;
+}
+
+.cabecera-dashboard p {
+    margin-top: 3px;
+    color: var(--texto-secundario);
+    font-size: 12px;
+}
+
+.cabecera-dashboard button {
+    flex-shrink: 0;
+}
+
+#proximosTurnos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.proximo-turno {
+    display: grid;
+    grid-template-columns: 150px 1fr auto;
+    align-items: center;
+    gap: 20px;
+    padding: 13px 15px;
+    background: var(--fondo);
+    border: 1px solid var(--borde);
+    border-radius: 9px;
+}
+
+.proximo-turno-fecha {
+    display: flex;
+    flex-direction: column;
+}
+
+.proximo-turno-fecha strong {
+    color: var(--azul-oscuro);
+    font-size: 13px;
+}
+
+.proximo-turno-fecha span {
+    margin-top: 2px;
+    color: var(--texto-secundario);
+    font-size: 11px;
+}
+
+.proximo-turno-datos {
+    display: flex;
+    flex-direction: column;
+}
+
+.proximo-turno-datos strong {
+    color: var(--texto);
+    font-size: 13px;
+}
+
+.proximo-turno-datos span {
+    margin-top: 2px;
+    color: var(--texto-secundario);
+    font-size: 11px;
+}
+
+.proximo-turno-estado {
+    justify-self: end;
+}
+
+
+/* =================================
 TARJETAS
 ================================= */
 

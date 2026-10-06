@@ -91,6 +91,15 @@
             <a
                 href="#"
                 class="opcion-menu"
+                onclick="cambiarModulo('seccionDashboard'); return false;"
+            >
+                <span class="menu-icono">I</span>
+                <span>Inicio</span>
+            </a>
+
+            <a
+                href="#"
+                class="opcion-menu"
                 onclick="cambiarModulo('seccionPacientes'); return false;"
             >
                 <span class="menu-icono">P</span>
@@ -238,6 +247,41 @@
 
 
         <main>
+
+
+            <section id="seccionDashboard" class="contenedor">
+
+                <div class="titulo">
+                    <div>
+                        <span class="seccion-etiqueta">RESUMEN</span>
+                        <h2>Inicio</h2>
+                        <p>Resumen de la actividad del consultorio.</p>
+                    </div>
+                </div>
+
+                <div class="tarjeta-dashboard">
+
+                    <div class="cabecera-dashboard">
+                        <div>
+                            <h3>Próximos turnos</h3>
+                            <p>Turnos próximos del consultorio.</p>
+                        </div>
+
+                        <button
+                            type="button"
+                            onclick="cambiarModulo('seccionTurnos')"
+                        >
+                            Ver todos
+                        </button>
+                    </div>
+
+                    <div id="proximosTurnos">
+                        <p>Cargando próximos turnos...</p>
+                    </div>
+
+                </div>
+
+            </section>
 
 
             <section id="seccionPacientes" class="contenedor">
