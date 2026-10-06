@@ -1305,7 +1305,7 @@ async function cargarProximosTurnos() {
 
         const fechaHoy =
             hoy.getFullYear() + "-" +
-            String(hoy.getMonth() + 1).padStart(2, "0") + "-" +
+            String(hoy.getMonth() + 1).padStart(2, "0") +
             String(hoy.getDate()).padStart(2, "0");
 
         const proximos =
@@ -1338,6 +1338,35 @@ async function cargarProximosTurnos() {
 
         proximos.forEach(turno => {
 
+            const partesFecha =
+                turno.fecha.split("-");
+
+            const fechaFormateada =
+                new Date(
+                    Number(partesFecha[0]),
+                    Number(partesFecha[1]) - 1,
+                    Number(partesFecha[2])
+                );
+
+            const opcionesFecha = {
+                weekday: "long",
+                day: "numeric",
+                month: "long"
+            };
+
+            const fechaTexto =
+                fechaFormateada.toLocaleDateString(
+                    "es-AR",
+                    opcionesFecha
+                );
+
+            const fechaCapitalizada =
+                fechaTexto.charAt(0).toUpperCase() +
+                fechaTexto.slice(1);
+
+            const hora =
+                turno.hora_inicio.substring(0, 5);
+
             const elemento =
                 document.createElement("div");
 
@@ -1348,10 +1377,10 @@ async function cargarProximosTurnos() {
             elemento.innerHTML = `
                 <div class="proximo-turno-fecha">
 
-                    <strong>${turno.fecha}</strong>
+                    <strong>${fechaCapitalizada}</strong>
 
                     <span>
-                        ${turno.hora_inicio} hs
+                        ${hora} hs
                     </span>
 
                 </div>
