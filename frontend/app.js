@@ -1,6 +1,5 @@
 const API_URL = "https://novagest-mental-api.onrender.com";
 
-
 /* AUTENTICACIÓN */
 
 const login = document.getElementById("login");
@@ -278,25 +277,37 @@ async function cargarPacientes() {
             elemento.classList.add("tarjeta", "paciente");
 
             elemento.innerHTML = `
-                <h3>${paciente.nombre} ${paciente.apellido}</h3>
-                <p><strong>DNI:</strong> ${paciente.dni}</p>
-                <p><strong>Teléfono:</strong> ${paciente.telefono || "No registrado"}</p>
-                <p><strong>Email:</strong> ${paciente.email || "No registrado"}</p>
-                <p><strong>Obra social:</strong> ${paciente.obra_social || "Sin obra social"}</p>
-                <p><strong>Afiliado:</strong> ${paciente.numero_afiliado || "No registrado"}</p>
+                <div class="cabecera-tarjeta">
+                    <h3>${paciente.nombre} ${paciente.apellido}</h3>
+                    <span class="flecha-tarjeta">›</span>
+                </div>
 
-                <div class="acciones">
+                <div class="detalle-tarjeta">
 
-                    <button onclick="editarPaciente(${paciente.id_paciente})">
-                        Editar
-                    </button>
+                    <p><strong>DNI:</strong> ${paciente.dni}</p>
+                    <p><strong>Teléfono:</strong> ${paciente.telefono || "No registrado"}</p>
+                    <p><strong>Email:</strong> ${paciente.email || "No registrado"}</p>
+                    <p><strong>Obra social:</strong> ${paciente.obra_social || "Sin obra social"}</p>
+                    <p><strong>Afiliado:</strong> ${paciente.numero_afiliado || "No registrado"}</p>
 
-                    <button onclick="eliminarPaciente(${paciente.id_paciente})">
-                        Eliminar
-                    </button>
+                    <div class="acciones">
+
+                        <button onclick="editarPaciente(${paciente.id_paciente}); event.stopPropagation();">
+                            Editar
+                        </button>
+
+                        <button onclick="eliminarPaciente(${paciente.id_paciente}); event.stopPropagation();">
+                            Eliminar
+                        </button>
+
+                    </div>
 
                 </div>
             `;
+
+            elemento.addEventListener("click", () => {
+                elemento.classList.toggle("expandida");
+            });
 
             listaPacientes.appendChild(elemento);
         });
@@ -1718,11 +1729,12 @@ btnCancelarUsuario.addEventListener("click", () => {
 async function cargarConsultorios() {
 
     try {
-        const respuesta = await apiFetch(
-            "/consultorios"
-        );
 
-        const consultorios = await respuesta.json();
+        const respuesta =
+            await apiFetch("/consultorios");
+
+        const consultorios =
+            await respuesta.json();
 
         consultorioPaciente.innerHTML =
             '<option value="">Seleccione un consultorio</option>';
@@ -1730,28 +1742,61 @@ async function cargarConsultorios() {
         consultorioProfesional.innerHTML =
             '<option value="">Seleccione un consultorio</option>';
 
+        consultorioUsuario.innerHTML =
+            '<option value="">Seleccione un consultorio</option>';
+
         consultorios.forEach(consultorio => {
 
-            const opcionPaciente = document.createElement("option");
+            const opcionPaciente =
+                document.createElement("option");
 
-            opcionPaciente.value = consultorio.id_consultorio;
-            opcionPaciente.textContent = consultorio.nombre;
+            opcionPaciente.value =
+                consultorio.id_consultorio;
 
-            consultorioPaciente.appendChild(opcionPaciente);
+            opcionPaciente.textContent =
+                consultorio.nombre;
+
+            consultorioPaciente.appendChild(
+                opcionPaciente
+            );
 
 
-            const opcionProfesional = document.createElement("option");
+            const opcionProfesional =
+                document.createElement("option");
 
-            opcionProfesional.value = consultorio.id_consultorio;
-            opcionProfesional.textContent = consultorio.nombre;
+            opcionProfesional.value =
+                consultorio.id_consultorio;
 
-            consultorioProfesional.appendChild(opcionProfesional);
+            opcionProfesional.textContent =
+                consultorio.nombre;
+
+            consultorioProfesional.appendChild(
+                opcionProfesional
+            );
+
+
+            const opcionUsuario =
+                document.createElement("option");
+
+            opcionUsuario.value =
+                consultorio.id_consultorio;
+
+            opcionUsuario.textContent =
+                consultorio.nombre;
+
+            consultorioUsuario.appendChild(
+                opcionUsuario
+            );
         });
 
         cargarListaConsultorios();
 
     } catch (error) {
-        console.error("Error al cargar consultorios:", error);
+
+        console.error(
+            "Error al cargar consultorios:",
+            error
+        );
     }
 }
 
@@ -1838,7 +1883,10 @@ async function cargarUsuarios() {
             const elemento =
                 document.createElement("div");
 
-            elemento.classList.add("tarjeta", "tarjeta-usuario");
+            elemento.classList.add(
+                "tarjeta",
+                "tarjeta-usuario"
+            );
 
             elemento.innerHTML = `
                 <h3>${usuario.nombre} ${usuario.apellido}</h3>
@@ -1857,6 +1905,23 @@ async function cargarUsuarios() {
                     <strong>Estado:</strong>
                     ${usuario.activo ? "Activo" : "Inactivo"}
                 </p>
+
+                <div class="acciones">
+
+                    <button
+                        onclick="editarUsuario(${usuario.id_usuario})">
+                        Editar
+                    </button>
+
+                    <button
+                        onclick="cambiarEstadoUsuario(
+                            ${usuario.id_usuario},
+                            ${usuario.activo}
+                        )">
+                        ${usuario.activo ? "Desactivar" : "Activar"}
+                    </button>
+
+                </div>
             `;
 
             listaUsuarios.appendChild(elemento);
@@ -1868,6 +1933,127 @@ async function cargarUsuarios() {
 
         listaUsuarios.innerHTML =
             "<p>No se pudieron cargar los usuarios.</p>";
+    }
+}
+
+async function editarUsuario(id) {
+
+    const nombre = prompt("Nuevo nombre:");
+
+    if (nombre === null || nombre.trim() === "") {
+        return;
+    }
+
+    const apellido = prompt("Nuevo apellido:");
+
+    if (apellido === null || apellido.trim() === "") {
+        return;
+    }
+
+    const email = prompt("Nuevo email:");
+
+    if (email === null || email.trim() === "") {
+        return;
+    }
+
+    try {
+
+        const respuesta =
+            await apiFetch("/usuarios/" + id, {
+
+                method: "PUT",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    nombre: nombre.trim(),
+                    apellido: apellido.trim(),
+                    email: email.trim()
+                })
+            });
+
+        if (!respuesta.ok) {
+
+            const error =
+                await respuesta.json();
+
+            alert(
+                error.detail ||
+                "No se pudo modificar el usuario."
+            );
+
+            return;
+        }
+
+        cargarUsuarios();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo modificar el usuario."
+        );
+    }
+}
+
+
+async function cambiarEstadoUsuario(id, activo) {
+
+    const accion =
+        activo ? "desactivar" : "activar";
+
+    const confirmar =
+        confirm(
+            `¿Querés ${accion} este usuario?`
+        );
+
+    if (!confirmar) {
+        return;
+    }
+
+    try {
+
+        const respuesta =
+            await apiFetch(
+                "/usuarios/" + id + "/estado",
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        activo: !activo
+                    })
+                }
+            );
+
+        if (!respuesta.ok) {
+
+            const error =
+                await respuesta.json();
+
+            alert(
+                error.detail ||
+                `No se pudo ${accion} el usuario.`
+            );
+
+            return;
+        }
+
+        cargarUsuarios();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            `No se pudo ${accion} el usuario.`
+        );
     }
 }
 
@@ -1992,6 +2178,8 @@ formUsuario.addEventListener("submit", async (evento) => {
         formUsuario.reset();
 
         formularioUsuario.classList.add("oculto");
+
+        cargarUsuarios();
 
         alert("Usuario creado correctamente.");
 

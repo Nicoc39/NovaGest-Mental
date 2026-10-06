@@ -75,15 +75,35 @@ def obtener_consultorios_usuario(usuario):
 
 
 app = FastAPI(
+
     title="NovaGest Mental",
+
     swagger_ui_parameters={
+
         "persistAuthorization": True
+
     }
+
 )
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+        "https://novagest-mental.netlify.app"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
         "https://novagest-mental.netlify.app"
     ],
     allow_credentials=True,
@@ -1027,6 +1047,170 @@ def crear_usuario(
         return {
             "mensaje": "Usuario creado correctamente",
             "id_usuario": id_usuario
+        }
+
+    except HTTPException:
+        conexion.rollback()
+        raise
+
+    except Exception as error:
+        conexion.rollback()
+
+        raise HTTPException(
+            status_code=400,
+            detail=str(error)
+        )
+
+    finally:
+        cursor.close()
+
+@app.put("/usuarios/{id_usuario}")
+def editar_usuario(
+    id_usuario: int,
+    datos: dict,
+    usuario=Depends(
+        verificar_roles("SUPERADMIN", "ADMINISTRADOR")
+    )
+):
+    cursor = conexion.cursor()
+
+    try:
+        consultorios = obtener_consultorios_usuario(usuario)
+
+        cursor.execute("""
+            SELECT id_usuario
+            FROM consultorio_usuario
+            WHERE id_usuario = %s
+              AND id_consultorio = ANY(%s);
+        """, (
+            id_usuario,
+            consultorios
+        ))
+
+        usuario_existente = cursor.fetchone()
+
+        if usuario_existente is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Usuario no encontrado"
+            )
+
+        nombre = datos.get("nombre")
+        apellido = datos.get("apellido")
+        email = datos.get("email")
+
+        if not nombre or not apellido or not email:
+            raise HTTPException(
+                status_code=400,
+                detail="Nombre, apellido y email son obligatorios"
+            )
+
+        cursor.execute("""
+            SELECT id_usuario
+            FROM usuario
+            WHERE email = %s
+              AND id_usuario <> %s;
+        """, (
+            email,
+            id_usuario
+        ))
+
+        email_existente = cursor.fetchone()
+
+        if email_existente is not None:
+            raise HTTPException(
+                status_code=400,
+                detail="Ya existe un usuario con ese email"
+            )
+
+        cursor.execute("""
+            UPDATE usuario
+            SET
+                nombre = %s,
+                apellido = %s,
+                email = %s
+            WHERE id_usuario = %s;
+        """, (
+            nombre,
+            apellido,
+            email,
+            id_usuario
+        ))
+
+        conexion.commit()
+
+        return {
+            "mensaje": "Usuario modificado correctamente"
+        }
+
+    except HTTPException:
+        conexion.rollback()
+        raise
+
+    except Exception as error:
+        conexion.rollback()
+
+        raise HTTPException(
+            status_code=400,
+            detail=str(error)
+        )
+
+    finally:
+        cursor.close()
+
+
+@app.put("/usuarios/{id_usuario}/estado")
+def cambiar_estado_usuario(
+    id_usuario: int,
+    datos: dict,
+    usuario=Depends(
+        verificar_roles("SUPERADMIN", "ADMINISTRADOR")
+    )
+):
+    cursor = conexion.cursor()
+
+    try:
+        consultorios = obtener_consultorios_usuario(usuario)
+
+        cursor.execute("""
+            SELECT id_usuario
+            FROM consultorio_usuario
+            WHERE id_usuario = %s
+              AND id_consultorio = ANY(%s);
+        """, (
+            id_usuario,
+            consultorios
+        ))
+
+        usuario_existente = cursor.fetchone()
+
+        if usuario_existente is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Usuario no encontrado"
+            )
+
+        activo = datos.get("activo")
+
+        if not isinstance(activo, bool):
+            raise HTTPException(
+                status_code=400,
+                detail="El estado debe ser verdadero o falso"
+            )
+
+        cursor.execute("""
+            UPDATE usuario
+            SET activo = %s
+            WHERE id_usuario = %s;
+        """, (
+            activo,
+            id_usuario
+        ))
+
+        conexion.commit()
+
+        return {
+            "mensaje": "Estado del usuario actualizado correctamente"
         }
 
     except HTTPException:

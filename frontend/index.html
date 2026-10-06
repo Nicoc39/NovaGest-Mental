@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -9,110 +10,250 @@
 
 <body>
 
-    <div id="login">
+<div id="login">
 
-        <div class="login-contenedor">
+    <div class="login-contenedor">
 
-            <h1>NovaGest Mental</h1>
-            <p>Gestión de consultorios psicológicos</p>
+        <div class="login-marca">
+            <div class="login-icono">N</div>
 
-            <form id="formLogin">
-
-                <div class="campo">
-                    <label for="emailLogin">Email</label>
-                    <input type="email" id="emailLogin" required>
-                </div>
-
-                <div class="campo">
-                    <label for="passwordLogin">Contraseña</label>
-                    <input type="password" id="passwordLogin" required>
-                </div>
-
-                <button type="submit">Iniciar sesión</button>
-
-                <p id="mensajeLogin"></p>
-
-            </form>
-
+            <div>
+                <h1>NovaGest</h1>
+                <span>MENTAL</span>
+            </div>
         </div>
+
+        <div class="login-descripcion">
+            <h2>Bienvenido</h2>
+            <p>Ingresá para administrar tu consultorio.</p>
+        </div>
+
+        <form id="formLogin">
+
+            <div class="campo">
+                <label for="emailLogin">Email</label>
+                <input
+                    type="email"
+                    id="emailLogin"
+                    placeholder="usuario@ejemplo.com"
+                    required
+                >
+            </div>
+
+            <div class="campo">
+                <label for="passwordLogin">Contraseña</label>
+                <input
+                    type="password"
+                    id="passwordLogin"
+                    placeholder="Ingresá tu contraseña"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn-login">
+                Iniciar sesión
+            </button>
+
+            <p id="mensajeLogin"></p>
+
+        </form>
 
     </div>
 
+</div>
 
-    <div id="aplicacion">
 
-        <header>
+<div id="aplicacion">
 
-            <div class="encabezado-superior">
+    <aside class="barra-lateral">
 
-                <div>
-                    <h1>NovaGest Mental</h1>
-                    <p>Gestión de consultorios psicológicos</p>
+        <div class="marca">
+
+            <div class="marca-icono">
+                N
+            </div>
+
+            <div class="marca-texto">
+                <strong>NovaGest</strong>
+                <span>MENTAL</span>
+            </div>
+
+        </div>
+
+
+        <div class="menu-titulo">
+            GESTIÓN
+        </div>
+
+
+        <nav class="menu-principal">
+
+            <a
+                href="#"
+                class="opcion-menu"
+                onclick="cambiarModulo('seccionPacientes'); return false;"
+            >
+                <span class="menu-icono">P</span>
+                <span>Pacientes</span>
+            </a>
+
+            <a
+                href="#"
+                class="opcion-menu"
+                onclick="cambiarModulo('seccionHistorias'); return false;"
+            >
+                <span class="menu-icono">H</span>
+                <span>Historias clínicas</span>
+            </a>
+
+            <a
+                href="#"
+                class="opcion-menu"
+                onclick="cambiarModulo('seccionProfesionales'); return false;"
+            >
+                <span class="menu-icono">Pr</span>
+                <span>Profesionales</span>
+            </a>
+
+            <a
+                href="#"
+                class="opcion-menu"
+                onclick="cambiarModulo('seccionTurnos'); return false;"
+            >
+                <span class="menu-icono">T</span>
+                <span>Turnos</span>
+            </a>
+
+            <a
+                href="#"
+                class="opcion-menu"
+                onclick="cambiarModulo('seccionSesiones'); return false;"
+            >
+                <span class="menu-icono">S</span>
+                <span>Sesiones</span>
+            </a>
+
+            <a
+                href="#"
+                class="opcion-menu"
+                onclick="cambiarModulo('seccionPagos'); return false;"
+            >
+                <span class="menu-icono">$</span>
+                <span>Pagos</span>
+            </a>
+
+            <a
+                href="#"
+                class="opcion-menu"
+                onclick="cambiarModulo('seccionObrasSociales'); return false;"
+            >
+                <span class="menu-icono">OS</span>
+                <span>Obras sociales</span>
+            </a>
+
+
+            <div class="menu-separador"></div>
+
+
+            <div class="menu-titulo">
+                ADMINISTRACIÓN
+            </div>
+
+            <a
+                href="#"
+                class="opcion-menu"
+                onclick="cambiarModulo('seccionConsultorios'); return false;"
+            >
+                <span class="menu-icono">C</span>
+                <span>Consultorios</span>
+            </a>
+
+            <a
+                href="#"
+                class="opcion-menu"
+                onclick="cambiarModulo('seccionUsuarios'); return false;"
+            >
+                <span class="menu-icono">U</span>
+                <span>Usuarios</span>
+            </a>
+
+        </nav>
+
+
+        <div class="barra-lateral-pie">
+
+            <div class="sistema-info">
+                <span class="estado-sistema"></span>
+                Sistema operativo
+            </div>
+
+            <button id="btnCerrarSesion" type="button">
+                Cerrar sesión
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <div class="contenido-aplicacion">
+
+        <header class="encabezado">
+
+            <div class="encabezado-titulo">
+
+                <span class="encabezado-etiqueta">
+                    PLATAFORMA DE GESTIÓN
+                </span>
+
+                <h1>NovaGest Mental</h1>
+
+                <p>
+                    Administración integral de consultorios psicológicos
+                </p>
+
+            </div>
+
+
+            <div class="usuario-panel">
+
+                <div class="usuario-avatar">
+                    U
                 </div>
 
-                <div class="usuario-panel">
+                <div class="usuario-datos">
 
-                    <span id="usuarioConectado"></span>
+                    <strong id="usuarioConectado">
+                    </strong>
 
-                    <button id="btnCerrarSesion" type="button">
-                        Cerrar sesión
-                    </button>
+                    <span>
+                        Usuario conectado
+                    </span>
 
                 </div>
 
             </div>
-
-            <nav class="menu-principal">
-
-                <a href="#" class="opcion-menu" onclick="cambiarModulo('seccionPacientes'); return false;">
-                    Pacientes
-                </a>
-
-                <a href="#" class="opcion-menu" onclick="cambiarModulo('seccionHistorias'); return false;">
-                    Historias clínicas
-                </a>
-
-                <a href="#" class="opcion-menu" onclick="cambiarModulo('seccionProfesionales'); return false;">
-                    Profesionales
-                </a>
-
-                <a href="#" class="opcion-menu" onclick="cambiarModulo('seccionTurnos'); return false;">
-                    Turnos
-                </a>
-
-                <a href="#" class="opcion-menu" onclick="cambiarModulo('seccionSesiones'); return false;">
-                    Sesiones
-                </a>
-
-                <a href="#" class="opcion-menu" onclick="cambiarModulo('seccionPagos'); return false;">
-                    Pagos
-                </a>
-
-                <a href="#" class="opcion-menu" onclick="cambiarModulo('seccionObrasSociales'); return false;">
-                    Obras sociales
-                </a>
-
-                <a href="#" class="opcion-menu" onclick="cambiarModulo('seccionConsultorios'); return false;">
-                    Consultorios
-                </a>
-
-                <a href="#" class="opcion-menu" onclick="cambiarModulo('seccionUsuarios'); return false;">
-                    Usuarios
-                </a>
-
-            </nav>
 
         </header>
 
 
         <main>
 
+
             <section id="seccionPacientes" class="contenedor">
 
                 <div class="titulo">
-                    <h2>Pacientes</h2>
-                    <button id="btnNuevo">Nuevo paciente</button>
+                    <div>
+                        <span class="seccion-etiqueta">GESTIÓN</span>
+                        <h2>Pacientes</h2>
+                        <p>Administrá la información de los pacientes registrados.</p>
+                    </div>
+
+                    <button id="btnNuevo">
+                        + Nuevo paciente
+                    </button>
                 </div>
+
 
                 <div id="formulario" class="formulario oculto">
 
@@ -152,31 +293,49 @@
 
                         <div class="campo">
                             <label for="idConsultorioPaciente">Consultorio</label>
+
                             <select id="idConsultorioPaciente" required>
-                                <option value="">Cargando consultorios...</option>
+                                <option value="">
+                                    Cargando consultorios...
+                                </option>
                             </select>
                         </div>
 
                         <div class="campo">
                             <label for="obraSocialPaciente">Obra social</label>
+
                             <select id="obraSocialPaciente">
-                                <option value="">Sin obra social</option>
+                                <option value="">
+                                    Sin obra social
+                                </option>
                             </select>
                         </div>
 
                         <div class="campo">
-                            <label for="numeroAfiliado">Número de afiliado</label>
-                            <input type="text" id="numeroAfiliado">
+                            <label for="numeroAfiliado">
+                                Número de afiliado
+                            </label>
+
+                            <input
+                                type="text"
+                                id="numeroAfiliado"
+                            >
                         </div>
 
                         <div class="botones">
-                            <button type="submit">Guardar paciente</button>
-                            <button type="button" id="btnCancelar">Cancelar</button>
+                            <button type="submit">
+                                Guardar paciente
+                            </button>
+
+                            <button type="button" id="btnCancelar">
+                                Cancelar
+                            </button>
                         </div>
 
                     </form>
 
                 </div>
+
 
                 <div id="listaPacientes">
                     <p>Cargando pacientes...</p>
@@ -185,12 +344,21 @@
             </section>
 
 
+
             <section id="seccionHistorias" class="contenedor">
 
                 <div class="titulo">
-                    <h2>Historias Clínicas</h2>
-                    <button id="btnNuevaHistoria">Nueva historia</button>
+                    <div>
+                        <span class="seccion-etiqueta">CLÍNICA</span>
+                        <h2>Historias clínicas</h2>
+                        <p>Consultá y administrá las historias clínicas.</p>
+                    </div>
+
+                    <button id="btnNuevaHistoria">
+                        + Nueva historia
+                    </button>
                 </div>
+
 
                 <div id="formularioHistoria" class="formulario oculto">
 
@@ -199,30 +367,56 @@
                     <form id="formHistoria">
 
                         <div class="campo">
-                            <label for="pacienteHistoria">Paciente</label>
+                            <label for="pacienteHistoria">
+                                Paciente
+                            </label>
+
                             <select id="pacienteHistoria" required>
-                                <option value="">Seleccionar paciente</option>
+                                <option value="">
+                                    Seleccionar paciente
+                                </option>
                             </select>
                         </div>
 
                         <div class="campo">
-                            <label for="fechaAperturaHistoria">Fecha de apertura</label>
-                            <input type="date" id="fechaAperturaHistoria" required>
+                            <label for="fechaAperturaHistoria">
+                                Fecha de apertura
+                            </label>
+
+                            <input
+                                type="date"
+                                id="fechaAperturaHistoria"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="observacionesHistoria">Observaciones</label>
+                            <label for="observacionesHistoria">
+                                Observaciones
+                            </label>
+
                             <textarea id="observacionesHistoria"></textarea>
                         </div>
 
                         <div class="botones">
-                            <button type="submit">Guardar historia</button>
-                            <button type="button" id="btnCancelarHistoria">Cancelar</button>
+
+                            <button type="submit">
+                                Guardar historia
+                            </button>
+
+                            <button
+                                type="button"
+                                id="btnCancelarHistoria"
+                            >
+                                Cancelar
+                            </button>
+
                         </div>
 
                     </form>
 
                 </div>
+
 
                 <div id="listaHistorias">
                     <p>Cargando historias clínicas...</p>
@@ -231,12 +425,21 @@
             </section>
 
 
+
             <section id="seccionProfesionales" class="contenedor">
 
                 <div class="titulo">
-                    <h2>Profesionales</h2>
-                    <button id="btnNuevoProfesional">Nuevo profesional</button>
+                    <div>
+                        <span class="seccion-etiqueta">EQUIPO</span>
+                        <h2>Profesionales</h2>
+                        <p>Gestioná los profesionales asociados al sistema.</p>
+                    </div>
+
+                    <button id="btnNuevoProfesional">
+                        + Nuevo profesional
+                    </button>
                 </div>
+
 
                 <div id="formularioProfesional" class="formulario oculto">
 
@@ -245,50 +448,111 @@
                     <form id="formProfesional">
 
                         <div class="campo">
-                            <label for="nombreProfesional">Nombre</label>
-                            <input type="text" id="nombreProfesional" required>
+                            <label for="nombreProfesional">
+                                Nombre
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nombreProfesional"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="apellidoProfesional">Apellido</label>
-                            <input type="text" id="apellidoProfesional" required>
+                            <label for="apellidoProfesional">
+                                Apellido
+                            </label>
+
+                            <input
+                                type="text"
+                                id="apellidoProfesional"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="emailProfesional">Email</label>
-                            <input type="email" id="emailProfesional" required>
+                            <label for="emailProfesional">
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                id="emailProfesional"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="passwordProfesional">Contraseña</label>
-                            <input type="password" id="passwordProfesional" required minlength="8">
+                            <label for="passwordProfesional">
+                                Contraseña
+                            </label>
+
+                            <input
+                                type="password"
+                                id="passwordProfesional"
+                                required
+                                minlength="8"
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="matricula">Matrícula</label>
-                            <input type="text" id="matricula" required>
+                            <label for="matricula">
+                                Matrícula
+                            </label>
+
+                            <input
+                                type="text"
+                                id="matricula"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="especialidad">Especialidad</label>
-                            <input type="text" id="especialidad">
+                            <label for="especialidad">
+                                Especialidad
+                            </label>
+
+                            <input
+                                type="text"
+                                id="especialidad"
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="idConsultorioProfesional">Consultorio</label>
-                            <select id="idConsultorioProfesional" required>
-                                <option value="">Cargando consultorios...</option>
+                            <label for="idConsultorioProfesional">
+                                Consultorio
+                            </label>
+
+                            <select
+                                id="idConsultorioProfesional"
+                                required
+                            >
+                                <option value="">
+                                    Cargando consultorios...
+                                </option>
                             </select>
                         </div>
 
                         <div class="botones">
-                            <button type="submit">Guardar profesional</button>
-                            <button type="button" id="btnCancelarProfesional">Cancelar</button>
+
+                            <button type="submit">
+                                Guardar profesional
+                            </button>
+
+                            <button
+                                type="button"
+                                id="btnCancelarProfesional"
+                            >
+                                Cancelar
+                            </button>
+
                         </div>
 
                     </form>
 
                 </div>
+
 
                 <div id="listaProfesionales">
                     <p>Cargando profesionales...</p>
@@ -297,12 +561,21 @@
             </section>
 
 
+
             <section id="seccionTurnos" class="contenedor">
 
                 <div class="titulo">
-                    <h2>Turnos</h2>
-                    <button id="btnNuevoTurno">Nuevo turno</button>
+                    <div>
+                        <span class="seccion-etiqueta">AGENDA</span>
+                        <h2>Turnos</h2>
+                        <p>Organizá y administrá la agenda de atención.</p>
+                    </div>
+
+                    <button id="btnNuevoTurno">
+                        + Nuevo turno
+                    </button>
                 </div>
+
 
                 <div id="formularioTurno" class="formulario oculto">
 
@@ -311,57 +584,116 @@
                     <form id="formTurno">
 
                         <div class="campo">
-                            <label for="pacienteTurno">Paciente</label>
+                            <label for="pacienteTurno">
+                                Paciente
+                            </label>
+
                             <select id="pacienteTurno" required>
-                                <option value="">Seleccionar paciente</option>
+                                <option value="">
+                                    Seleccionar paciente
+                                </option>
                             </select>
                         </div>
 
                         <div class="campo">
-                            <label for="profesionalTurno">Profesional</label>
+                            <label for="profesionalTurno">
+                                Profesional
+                            </label>
+
                             <select id="profesionalTurno" required>
-                                <option value="">Seleccionar profesional</option>
+                                <option value="">
+                                    Seleccionar profesional
+                                </option>
                             </select>
                         </div>
 
                         <div class="campo">
-                            <label for="fechaTurno">Fecha</label>
-                            <input type="date" id="fechaTurno" required>
+                            <label for="fechaTurno">
+                                Fecha
+                            </label>
+
+                            <input
+                                type="date"
+                                id="fechaTurno"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="horaInicio">Hora de inicio</label>
-                            <input type="time" id="horaInicio" required>
+                            <label for="horaInicio">
+                                Hora de inicio
+                            </label>
+
+                            <input
+                                type="time"
+                                id="horaInicio"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="horaFin">Hora de fin</label>
-                            <input type="time" id="horaFin" required>
+                            <label for="horaFin">
+                                Hora de fin
+                            </label>
+
+                            <input
+                                type="time"
+                                id="horaFin"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="estadoTurno">Estado</label>
+                            <label for="estadoTurno">
+                                Estado
+                            </label>
+
                             <select id="estadoTurno" required>
-                                <option value="PENDIENTE">Pendiente</option>
-                                <option value="CONFIRMADO">Confirmado</option>
-                                <option value="CANCELADO">Cancelado</option>
-                                <option value="REPROGRAMADO">Reprogramado</option>
+                                <option value="PENDIENTE">
+                                    Pendiente
+                                </option>
+
+                                <option value="CONFIRMADO">
+                                    Confirmado
+                                </option>
+
+                                <option value="CANCELADO">
+                                    Cancelado
+                                </option>
+
+                                <option value="REPROGRAMADO">
+                                    Reprogramado
+                                </option>
                             </select>
                         </div>
 
                         <div class="campo">
-                            <label for="observacionesTurno">Observaciones</label>
+                            <label for="observacionesTurno">
+                                Observaciones
+                            </label>
+
                             <textarea id="observacionesTurno"></textarea>
                         </div>
 
                         <div class="botones">
-                            <button type="submit">Guardar turno</button>
-                            <button type="button" id="btnCancelarTurno">Cancelar</button>
+
+                            <button type="submit">
+                                Guardar turno
+                            </button>
+
+                            <button
+                                type="button"
+                                id="btnCancelarTurno"
+                            >
+                                Cancelar
+                            </button>
+
                         </div>
 
                     </form>
 
                 </div>
+
 
                 <div id="listaTurnos">
                     <p>Cargando turnos...</p>
@@ -370,12 +702,21 @@
             </section>
 
 
+
             <section id="seccionSesiones" class="contenedor">
 
                 <div class="titulo">
-                    <h2>Sesiones</h2>
-                    <button id="btnNuevaSesion">Nueva sesión</button>
+                    <div>
+                        <span class="seccion-etiqueta">ATENCIÓN</span>
+                        <h2>Sesiones</h2>
+                        <p>Registrá las sesiones realizadas con los pacientes.</p>
+                    </div>
+
+                    <button id="btnNuevaSesion">
+                        + Nueva sesión
+                    </button>
                 </div>
+
 
                 <div id="formularioSesion" class="formulario oculto">
 
@@ -384,37 +725,68 @@
                     <form id="formSesion">
 
                         <div class="campo">
-                            <label for="turnoSesion">Turno</label>
+                            <label for="turnoSesion">
+                                Turno
+                            </label>
+
                             <select id="turnoSesion" required>
-                                <option value="">Seleccionar turno</option>
+                                <option value="">
+                                    Seleccionar turno
+                                </option>
                             </select>
                         </div>
 
                         <div class="campo">
-                            <label for="fechaSesion">Fecha</label>
-                            <input type="date" id="fechaSesion" required>
+                            <label for="fechaSesion">
+                                Fecha
+                            </label>
+
+                            <input
+                                type="date"
+                                id="fechaSesion"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="observacionesSesion">Observaciones</label>
+                            <label for="observacionesSesion">
+                                Observaciones
+                            </label>
+
                             <textarea id="observacionesSesion"></textarea>
                         </div>
 
                         <div class="campo">
-                            <label for="obraSocialSesion">Obra social</label>
+                            <label for="obraSocialSesion">
+                                Obra social
+                            </label>
+
                             <select id="obraSocialSesion">
-                                <option value="">Particular / sin obra social</option>
+                                <option value="">
+                                    Particular / sin obra social
+                                </option>
                             </select>
                         </div>
 
                         <div class="botones">
-                            <button type="submit">Guardar sesión</button>
-                            <button type="button" id="btnCancelarSesion">Cancelar</button>
+
+                            <button type="submit">
+                                Guardar sesión
+                            </button>
+
+                            <button
+                                type="button"
+                                id="btnCancelarSesion"
+                            >
+                                Cancelar
+                            </button>
+
                         </div>
 
                     </form>
 
                 </div>
+
 
                 <div id="listaSesiones">
                     <p>Cargando sesiones...</p>
@@ -423,12 +795,21 @@
             </section>
 
 
+
             <section id="seccionPagos" class="contenedor">
 
                 <div class="titulo">
-                    <h2>Pagos</h2>
-                    <button id="btnNuevoPago">Nuevo pago</button>
+                    <div>
+                        <span class="seccion-etiqueta">FINANZAS</span>
+                        <h2>Pagos</h2>
+                        <p>Registrá y consultá los pagos realizados.</p>
+                    </div>
+
+                    <button id="btnNuevoPago">
+                        + Nuevo pago
+                    </button>
                 </div>
+
 
                 <div id="formularioPago" class="formulario oculto">
 
@@ -437,40 +818,86 @@
                     <form id="formPago">
 
                         <div class="campo">
-                            <label for="sesionPago">Sesión</label>
+                            <label for="sesionPago">
+                                Sesión
+                            </label>
+
                             <select id="sesionPago" required>
-                                <option value="">Seleccionar sesión</option>
+                                <option value="">
+                                    Seleccionar sesión
+                                </option>
                             </select>
                         </div>
 
                         <div class="campo">
-                            <label for="fechaPago">Fecha</label>
-                            <input type="date" id="fechaPago" required>
+                            <label for="fechaPago">
+                                Fecha
+                            </label>
+
+                            <input
+                                type="date"
+                                id="fechaPago"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="importePago">Importe</label>
-                            <input type="number" id="importePago" min="0" step="0.01" required>
+                            <label for="importePago">
+                                Importe
+                            </label>
+
+                            <input
+                                type="number"
+                                id="importePago"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="medioPago">Medio de pago</label>
+                            <label for="medioPago">
+                                Medio de pago
+                            </label>
+
                             <select id="medioPago" required>
-                                <option value="">Seleccionar medio</option>
-                                <option value="EFECTIVO">Efectivo</option>
-                                <option value="TRANSFERENCIA">Transferencia</option>
-                                <option value="TARJETA">Tarjeta</option>
+                                <option value="">
+                                    Seleccionar medio
+                                </option>
+
+                                <option value="EFECTIVO">
+                                    Efectivo
+                                </option>
+
+                                <option value="TRANSFERENCIA">
+                                    Transferencia
+                                </option>
+
+                                <option value="TARJETA">
+                                    Tarjeta
+                                </option>
                             </select>
                         </div>
 
                         <div class="botones">
-                            <button type="submit">Guardar pago</button>
-                            <button type="button" id="btnCancelarPago">Cancelar</button>
+
+                            <button type="submit">
+                                Guardar pago
+                            </button>
+
+                            <button
+                                type="button"
+                                id="btnCancelarPago"
+                            >
+                                Cancelar
+                            </button>
+
                         </div>
 
                     </form>
 
                 </div>
+
 
                 <div id="listaPagos">
                     <p>Cargando pagos...</p>
@@ -479,12 +906,21 @@
             </section>
 
 
+
             <section id="seccionObrasSociales" class="contenedor">
 
                 <div class="titulo">
-                    <h2>Obras Sociales</h2>
-                    <button id="btnNuevaObraSocial">Nueva obra social</button>
+                    <div>
+                        <span class="seccion-etiqueta">COBERTURA</span>
+                        <h2>Obras sociales</h2>
+                        <p>Administrá las obras sociales disponibles.</p>
+                    </div>
+
+                    <button id="btnNuevaObraSocial">
+                        + Nueva obra social
+                    </button>
                 </div>
+
 
                 <div id="formularioObraSocial" class="formulario oculto">
 
@@ -493,8 +929,15 @@
                     <form id="formObraSocial">
 
                         <div class="campo">
-                            <label for="nombreObraSocial">Nombre</label>
-                            <input type="text" id="nombreObraSocial" required>
+                            <label for="nombreObraSocial">
+                                Nombre
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nombreObraSocial"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
@@ -509,15 +952,24 @@
                         </div>
 
                         <div class="botones">
-                            <button type="submit">Guardar obra social</button>
-                            <button type="button" id="btnCancelarObraSocial">
+
+                            <button type="submit">
+                                Guardar obra social
+                            </button>
+
+                            <button
+                                type="button"
+                                id="btnCancelarObraSocial"
+                            >
                                 Cancelar
                             </button>
+
                         </div>
 
                     </form>
 
                 </div>
+
 
                 <div id="listaObrasSociales">
                     <p>Cargando obras sociales...</p>
@@ -526,12 +978,21 @@
             </section>
 
 
+
             <section id="seccionConsultorios" class="contenedor">
 
                 <div class="titulo">
-                    <h2>Consultorios</h2>
-                    <button id="btnNuevoConsultorio">Nuevo consultorio</button>
+                    <div>
+                        <span class="seccion-etiqueta">ADMINISTRACIÓN</span>
+                        <h2>Consultorios</h2>
+                        <p>Configurá los consultorios y sus datos.</p>
+                    </div>
+
+                    <button id="btnNuevoConsultorio">
+                        + Nuevo consultorio
+                    </button>
                 </div>
+
 
                 <div id="formularioConsultorio" class="formulario oculto">
 
@@ -540,35 +1001,69 @@
                     <form id="formConsultorio">
 
                         <div class="campo">
-                            <label for="nombreConsultorio">Nombre</label>
-                            <input type="text" id="nombreConsultorio" required>
+                            <label for="nombreConsultorio">
+                                Nombre
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nombreConsultorio"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="direccionConsultorio">Dirección</label>
-                            <input type="text" id="direccionConsultorio">
+                            <label for="direccionConsultorio">
+                                Dirección
+                            </label>
+
+                            <input
+                                type="text"
+                                id="direccionConsultorio"
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="telefonoConsultorio">Teléfono</label>
-                            <input type="text" id="telefonoConsultorio">
+                            <label for="telefonoConsultorio">
+                                Teléfono
+                            </label>
+
+                            <input
+                                type="text"
+                                id="telefonoConsultorio"
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="emailConsultorio">Email</label>
-                            <input type="email" id="emailConsultorio">
+                            <label for="emailConsultorio">
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                id="emailConsultorio"
+                            >
                         </div>
 
                         <div class="botones">
-                            <button type="submit">Guardar consultorio</button>
-                            <button type="button" id="btnCancelarConsultorio">
+
+                            <button type="submit">
+                                Guardar consultorio
+                            </button>
+
+                            <button
+                                type="button"
+                                id="btnCancelarConsultorio"
+                            >
                                 Cancelar
                             </button>
+
                         </div>
 
                     </form>
 
                 </div>
+
 
                 <div id="listaConsultorios">
                     <p>Cargando consultorios...</p>
@@ -577,12 +1072,21 @@
             </section>
 
 
+
             <section id="seccionUsuarios" class="contenedor">
 
                 <div class="titulo">
-                    <h2>Usuarios</h2>
-                    <button id="btnNuevoUsuario">Nuevo usuario</button>
+                    <div>
+                        <span class="seccion-etiqueta">ADMINISTRACIÓN</span>
+                        <h2>Usuarios</h2>
+                        <p>Gestioná los usuarios y sus permisos.</p>
+                    </div>
+
+                    <button id="btnNuevoUsuario">
+                        + Nuevo usuario
+                    </button>
                 </div>
+
 
                 <div id="formularioUsuario" class="formulario oculto">
 
@@ -591,51 +1095,109 @@
                     <form id="formUsuario">
 
                         <div class="campo">
-                            <label for="nombreUsuario">Nombre</label>
-                            <input type="text" id="nombreUsuario" required>
+                            <label for="nombreUsuario">
+                                Nombre
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nombreUsuario"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="apellidoUsuario">Apellido</label>
-                            <input type="text" id="apellidoUsuario" required>
+                            <label for="apellidoUsuario">
+                                Apellido
+                            </label>
+
+                            <input
+                                type="text"
+                                id="apellidoUsuario"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="emailUsuario">Email</label>
-                            <input type="email" id="emailUsuario" required>
+                            <label for="emailUsuario">
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                id="emailUsuario"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="passwordUsuario">Contraseña</label>
-                            <input type="password" id="passwordUsuario" required>
+                            <label for="passwordUsuario">
+                                Contraseña
+                            </label>
+
+                            <input
+                                type="password"
+                                id="passwordUsuario"
+                                required
+                            >
                         </div>
 
                         <div class="campo">
-                            <label for="rolUsuario">Rol</label>
+                            <label for="rolUsuario">
+                                Rol
+                            </label>
+
                             <select id="rolUsuario" required>
-                                <option value="">Seleccionar rol</option>
-                                <option value="ADMINISTRADOR">Administrador</option>
-                                <option value="ADMINISTRATIVO">Administrativo</option>
+
+                                <option value="">
+                                    Seleccionar rol
+                                </option>
+
+                                <option value="ADMINISTRADOR">
+                                    Administrador
+                                </option>
+
+                                <option value="ADMINISTRATIVO">
+                                    Administrativo
+                                </option>
+
                             </select>
                         </div>
 
                         <div class="campo">
-                            <label for="consultorioUsuario">Consultorio</label>
-                            <select id="consultorioUsuario" required>
-                                <option value="">Cargando consultorios...</option>
+                            <label for="consultorioUsuario">
+                                Consultorio
+                            </label>
+
+                            <select
+                                id="consultorioUsuario"
+                                required
+                            >
+                                <option value="">
+                                    Cargando consultorios...
+                                </option>
                             </select>
                         </div>
 
                         <div class="botones">
-                            <button type="submit">Guardar usuario</button>
-                            <button type="button" id="btnCancelarUsuario">
+
+                            <button type="submit">
+                                Guardar usuario
+                            </button>
+
+                            <button
+                                type="button"
+                                id="btnCancelarUsuario"
+                            >
                                 Cancelar
                             </button>
+
                         </div>
 
                     </form>
 
                 </div>
+
 
                 <div id="listaUsuarios">
                     <p>Cargando usuarios...</p>
@@ -643,11 +1205,15 @@
 
             </section>
 
+
         </main>
 
     </div>
 
-    <script src="app.js"></script>
+</div>
+
+
+<script src="app.js"></script>
 
 </body>
 </html>
