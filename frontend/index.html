@@ -1257,6 +1257,55 @@
 </div>
 
 
+<div id="modalEdicion" class="modal-edicion oculto">
+
+    <div class="modal-edicion-contenido">
+
+        <div class="modal-edicion-cabecera">
+
+            <div>
+                <span class="seccion-etiqueta">EDICIÓN</span>
+                <h3 id="modalEdicionTitulo">
+                    Editar registro
+                </h3>
+            </div>
+
+            <button
+                type="button"
+                class="modal-edicion-cerrar"
+                onclick="cerrarModalEdicion()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="modalEdicionCampos"></div>
+
+        <div class="modal-edicion-acciones">
+
+            <button
+                type="button"
+                class="boton-secundario"
+                onclick="cerrarModalEdicion()"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                onclick="confirmarEdicion()"
+            >
+                Guardar cambios
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 <script src="app.js"></script>
 
 </body>

@@ -501,29 +501,199 @@ async function eliminarPaciente(id) {
     }
 }
 
+let tipoEdicionActual = null;
+let datosEdicionActual = null;
 
-async function editarPaciente(id) {
+function abrirModalEdicion(titulo, campos, tipo, datos = {}) {
 
-    const nombre = prompt("Nuevo nombre:");
+    const modal =
+        document.getElementById("modalEdicion");
 
-    if (nombre === null || nombre.trim() === "") {
+    const tituloModal =
+        document.getElementById("modalEdicionTitulo");
+
+    const contenedor =
+        document.getElementById("modalEdicionCampos");
+
+    tituloModal.textContent = titulo;
+
+    contenedor.innerHTML = "";
+
+    tipoEdicionActual = tipo;
+    datosEdicionActual = datos;
+
+    campos.forEach(campo => {
+
+        const div =
+            document.createElement("div");
+
+        div.classList.add("campo");
+
+        const label =
+            document.createElement("label");
+
+        label.textContent = campo.label;
+
+        label.htmlFor = campo.id;
+
+        const input =
+            document.createElement(
+                campo.tipo === "select"
+                    ? "select"
+                    : "input"
+            );
+
+        input.id = campo.id;
+        input.name = campo.id;
+
+        if (campo.tipo !== "select") {
+            input.type = campo.tipo || "text";
+            input.value = campo.valor ?? "";
+        }
+
+        if (campo.tipo === "select") {
+
+            campo.opciones.forEach(opcion => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = opcion.value;
+                option.textContent = opcion.texto;
+
+                if (
+                    String(opcion.value) ===
+                    String(campo.valor)
+                ) {
+                    option.selected = true;
+                }
+
+                input.appendChild(option);
+            });
+        }
+
+        if (campo.required) {
+            input.required = true;
+        }
+
+        div.appendChild(label);
+        div.appendChild(input);
+
+        contenedor.appendChild(div);
+    });
+
+    modal.classList.remove("oculto");
+}
+
+function cerrarModalEdicion() {
+
+    const modal =
+        document.getElementById("modalEdicion");
+
+    modal.classList.add("oculto");
+
+    document.getElementById(
+        "modalEdicionCampos"
+    ).innerHTML = "";
+
+    tipoEdicionActual = null;
+    datosEdicionActual = null;
+}
+
+async function confirmarEdicion() {
+
+    if (!tipoEdicionActual) {
         return;
     }
 
-    const apellido = prompt("Nuevo apellido:");
+    const campos =
+        document.querySelectorAll(
+            "#modalEdicionCampos input, #modalEdicionCampos select"
+        );
 
-    if (apellido === null || apellido.trim() === "") {
-        return;
-    }
+    const datos = {};
+
+    campos.forEach(campo => {
+        datos[campo.name] = campo.value;
+    });
 
     try {
 
-        const respuestaPaciente =
+        if (tipoEdicionActual === "paciente") {
+
+            const paciente =
+                await apiFetch(
+                    "/pacientes/" +
+                    datosEdicionActual.id
+                );
+
+            const datosPaciente =
+                await paciente.json();
+
+            datosPaciente.nombre =
+                datos.nombre.trim();
+
+            datosPaciente.apellido =
+                datos.apellido.trim();
+
+            const respuesta =
+                await apiFetch(
+                    "/pacientes/" +
+                    datosEdicionActual.id,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(datosPaciente)
+                    }
+                );
+
+            if (!respuesta.ok) {
+
+                const error =
+                    await respuesta.json();
+
+                alert(
+                    error.detail ||
+                    "No se pudo modificar el paciente."
+                );
+
+                return;
+            }
+
+            cerrarModalEdicion();
+
+            cargarPacientes();
+
+            return;
+        }
+
+        alert(
+            "Esta edición todavía no está configurada."
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo completar la edición."
+        );
+    }
+}
+
+async function editarPaciente(id) {
+
+    try {
+
+        const respuesta =
             await apiFetch("/pacientes/" + id);
 
-        if (!respuestaPaciente.ok) {
+        if (!respuesta.ok) {
 
-            const error = await respuestaPaciente.json();
+            const error =
+                await respuesta.json();
 
             alert(
                 error.detail ||
@@ -534,46 +704,39 @@ async function editarPaciente(id) {
         }
 
         const paciente =
-            await respuestaPaciente.json();
+            await respuesta.json();
 
-        paciente.nombre = nombre;
-        paciente.apellido = apellido;
-
-        const respuesta =
-            await apiFetch("/pacientes/" + id, {
-
-                method: "PUT",
-
-                headers: {
-                    "Content-Type": "application/json"
+        abrirModalEdicion(
+            "Editar paciente",
+            [
+                {
+                    id: "nombre",
+                    label: "Nombre",
+                    tipo: "text",
+                    valor: paciente.nombre,
+                    required: true
                 },
-
-                body: JSON.stringify(paciente)
-            });
-
-        console.log("Método enviado:", "PUT");
-        console.log("URL:", API_URL + "/pacientes/" + id);
-        console.log("Respuesta:", respuesta.status);
-
-        if (!respuesta.ok) {
-
-            const error = await respuesta.json();
-
-            alert(
-                error.detail ||
-                "No se pudo modificar el paciente."
-            );
-
-            return;
-        }
-
-        cargarPacientes();
+                {
+                    id: "apellido",
+                    label: "Apellido",
+                    tipo: "text",
+                    valor: paciente.apellido,
+                    required: true
+                }
+            ],
+            "paciente",
+            {
+                id: id
+            }
+        );
 
     } catch (error) {
 
         console.error(error);
 
-        alert("No se pudo modificar el paciente.");
+        alert(
+            "No se pudo consultar el paciente."
+        );
     }
 }
 
