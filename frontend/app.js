@@ -1285,8 +1285,6 @@ async function cargarTurnos() {
 
 async function cargarProximosTurnos() {
 
-    alert("SE EJECUTÓ cargarProximosTurnos");
-
     const contenedor =
         document.getElementById("proximosTurnos");
 
@@ -1302,20 +1300,18 @@ async function cargarProximosTurnos() {
         const turnos =
             await respuesta.json();
 
-        alert(JSON.stringify(turnos, null, 2));
-
         const hoy =
             new Date();
 
         const fechaHoy =
             hoy.getFullYear() + "-" +
-            String(hoy.getMonth() + 1).padStart(2, "0") +
+            String(hoy.getMonth() + 1).padStart(2, "0") + "-" +
             String(hoy.getDate()).padStart(2, "0");
 
         const proximos =
             turnos
                 .filter(turno =>
-                    String(turno.fecha).substring(0, 10) >= fechaHoy &&
+                    turno.fecha >= fechaHoy &&
                     turno.estado !== "CANCELADO"
                 )
                 .sort((a, b) => {
@@ -1411,6 +1407,7 @@ async function cargarProximosTurnos() {
             "<p>No se pudieron cargar los próximos turnos.</p>";
     }
 }
+
 
 formTurno.addEventListener("submit", async (evento) => {
 
@@ -2767,7 +2764,6 @@ if (tokenGuardado) {
     cargarProfesionales();
     cargarTurnos();
 
-    alert("LLEGÓ ANTES DE cargarProximosTurnos");
 
     cargarProximosTurnos();
     cargarSesiones();
