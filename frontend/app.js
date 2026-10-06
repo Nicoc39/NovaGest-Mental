@@ -1300,7 +1300,7 @@ async function cargarProximosTurnos() {
         const turnos =
             await respuesta.json();
 
-        console.log("TURNOS DEL DASHBOARD:", turnos);
+        alert(JSON.stringify(turnos, null, 2));
 
         const hoy =
             new Date();
