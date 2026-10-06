@@ -2766,6 +2766,9 @@ if (tokenGuardado) {
     cargarPacientes();
     cargarProfesionales();
     cargarTurnos();
+
+    alert("LLEGÓ ANTES DE cargarProximosTurnos");
+
     cargarProximosTurnos();
     cargarSesiones();
     cargarHistorias();
