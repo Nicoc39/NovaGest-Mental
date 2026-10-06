@@ -807,14 +807,40 @@ async function cargarProfesionales() {
             const elemento =
                 document.createElement("div");
 
-            elemento.classList.add("tarjeta", "tarjeta-profesional");
+            elemento.classList.add(
+                "tarjeta",
+                "tarjeta-profesional"
+            );
 
             elemento.innerHTML = `
-                <h3>${profesional.nombre} ${profesional.apellido}</h3>
-                <p><strong>Matrícula:</strong> ${profesional.matricula}</p>
-                <p><strong>Especialidad:</strong> ${profesional.especialidad || "No registrada"}</p>
-                <p><strong>Email:</strong> ${profesional.email}</p>
+                <div class="cabecera-tarjeta">
+                    <h3>${profesional.nombre} ${profesional.apellido}</h3>
+                    <span class="flecha-tarjeta">›</span>
+                </div>
+
+                <div class="detalle-tarjeta">
+
+                    <p>
+                        <strong>Matrícula:</strong>
+                        ${profesional.matricula}
+                    </p>
+
+                    <p>
+                        <strong>Especialidad:</strong>
+                        ${profesional.especialidad || "No registrada"}
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        ${profesional.email || "No registrado"}
+                    </p>
+
+                </div>
             `;
+
+            elemento.addEventListener("click", () => {
+                elemento.classList.toggle("expandida");
+            });
 
             listaProfesionales.appendChild(elemento);
         });
@@ -1028,21 +1054,52 @@ async function cargarTurnos() {
             const elemento =
                 document.createElement("div");
 
-            elemento.classList.add("tarjeta", "tarjeta-turno");
+            elemento.classList.add(
+                "tarjeta",
+                "tarjeta-turno"
+            );
 
             elemento.innerHTML = `
-                <h3>${turno.paciente}</h3>
-                <p><strong>Profesional:</strong> ${turno.profesional}</p>
-                <p><strong>Fecha:</strong> ${turno.fecha}</p>
-                <p><strong>Horario:</strong> ${turno.hora_inicio} - ${turno.hora_fin}</p>
-                <p>
-                    <strong>Estado:</strong>
-                    <span class="estado-turno estado-${turno.estado.toLowerCase()}">
-                        ${turno.estado}
-                    </span>
-                </p>
-                <p><strong>Observaciones:</strong> ${turno.observaciones || "Sin observaciones"}</p>
+                <div class="cabecera-tarjeta">
+                    <h3>${turno.paciente}</h3>
+                    <span class="flecha-tarjeta">›</span>
+                </div>
+
+                <div class="detalle-tarjeta">
+
+                    <p>
+                        <strong>Profesional:</strong>
+                        ${turno.profesional}
+                    </p>
+
+                    <p>
+                        <strong>Fecha:</strong>
+                        ${turno.fecha}
+                    </p>
+
+                    <p>
+                        <strong>Horario:</strong>
+                        ${turno.hora_inicio} - ${turno.hora_fin}
+                    </p>
+
+                    <p>
+                        <strong>Estado:</strong>
+                        <span class="estado-turno estado-${turno.estado.toLowerCase()}">
+                            ${turno.estado}
+                        </span>
+                    </p>
+
+                    <p>
+                        <strong>Observaciones:</strong>
+                        ${turno.observaciones || "Sin observaciones"}
+                    </p>
+
+                </div>
             `;
+
+            elemento.addEventListener("click", () => {
+                elemento.classList.toggle("expandida");
+            });
 
             listaTurnos.appendChild(elemento);
         });
@@ -1243,17 +1300,45 @@ async function cargarSesiones() {
             const elemento =
                 document.createElement("div");
 
-            elemento.classList.add("tarjeta", "tarjeta-sesion");
+            elemento.classList.add(
+                "tarjeta",
+                "tarjeta-sesion"
+            );
 
             elemento.innerHTML = `
-                <h3>${sesion.paciente}</h3>
-                <p><strong>Profesional:</strong> ${sesion.profesional}</p>
-                <p><strong>Fecha:</strong> ${sesion.fecha}</p>
-                <p><strong>Observaciones:</strong> ${sesion.observaciones || "Sin observaciones"}</p>
-                <p><strong>Obra social:</strong> ${
-                    sesion.id_obra_social || "Particular"
-                }</p>
+                <div class="cabecera-tarjeta">
+                    <h3>${sesion.paciente}</h3>
+                    <span class="flecha-tarjeta">›</span>
+                </div>
+
+                <div class="detalle-tarjeta">
+
+                    <p>
+                        <strong>Profesional:</strong>
+                        ${sesion.profesional}
+                    </p>
+
+                    <p>
+                        <strong>Fecha:</strong>
+                        ${sesion.fecha}
+                    </p>
+
+                    <p>
+                        <strong>Observaciones:</strong>
+                        ${sesion.observaciones || "Sin observaciones"}
+                    </p>
+
+                    <p>
+                        <strong>Obra social:</strong>
+                        ${sesion.id_obra_social || "Particular"}
+                    </p>
+
+                </div>
             `;
+
+            elemento.addEventListener("click", () => {
+                elemento.classList.toggle("expandida");
+            });
 
             listaSesiones.appendChild(elemento);
         });
@@ -1424,15 +1509,45 @@ async function cargarPagos() {
             const elemento =
                 document.createElement("div");
 
-            elemento.classList.add("tarjeta", "tarjeta-pago");
+            elemento.classList.add(
+                "tarjeta",
+                "tarjeta-pago"
+            );
 
             elemento.innerHTML = `
-                <h3>${pago.paciente}</h3>
-                <p><strong>Fecha:</strong> ${pago.fecha}</p>
-                <p><strong>Importe:</strong> $${pago.importe}</p>
-                <p><strong>Medio de pago:</strong> ${pago.medio_pago}</p>
-                <p><strong>Total pagado de la sesión:</strong> $${pago.total_pagado}</p>
+                <div class="cabecera-tarjeta">
+                    <h3>${pago.paciente}</h3>
+                    <span class="flecha-tarjeta">›</span>
+                </div>
+
+                <div class="detalle-tarjeta">
+
+                    <p>
+                        <strong>Fecha:</strong>
+                        ${pago.fecha}
+                    </p>
+
+                    <p>
+                        <strong>Importe:</strong>
+                        $${pago.importe}
+                    </p>
+
+                    <p>
+                        <strong>Medio de pago:</strong>
+                        ${pago.medio_pago}
+                    </p>
+
+                    <p>
+                        <strong>Total pagado de la sesión:</strong>
+                        $${pago.total_pagado}
+                    </p>
+
+                </div>
             `;
+
+            elemento.addEventListener("click", () => {
+                elemento.classList.toggle("expandida");
+            });
 
             listaPagos.appendChild(elemento);
         });
@@ -1602,31 +1717,45 @@ async function cargarObrasSociales() {
             const elemento =
                 document.createElement("div");
 
-            elemento.classList.add("tarjeta", "tarjeta-obra-social");
+            elemento.classList.add(
+                "tarjeta",
+                "tarjeta-obra-social"
+            );
 
             elemento.innerHTML = `
-                <h3>${obraSocial.nombre}</h3>
+                <div class="cabecera-tarjeta">
+                    <h3>${obraSocial.nombre}</h3>
+                    <span class="flecha-tarjeta">›</span>
+                </div>
 
-                <p><strong>Contacto:</strong> ${
-                    obraSocial.numero_contacto ||
-                    "No registrado"
-                }</p>
+                <div class="detalle-tarjeta">
 
-                <p>
-                    <strong>Estado:</strong>
-                    <span class="estado-obra-social ${
-                        obraSocial.activo
-                            ? "activa"
-                            : "inactiva"
-                    }">
-                        ${
+                    <p>
+                        <strong>Contacto:</strong>
+                        ${obraSocial.numero_contacto || "No registrado"}
+                    </p>
+
+                    <p>
+                        <strong>Estado:</strong>
+                        <span class="estado-obra-social ${
                             obraSocial.activo
-                                ? "Activa"
-                                : "Inactiva"
-                        }
-                    </span>
-                </p>
+                                ? "activa"
+                                : "inactiva"
+                        }">
+                            ${
+                                obraSocial.activo
+                                    ? "Activa"
+                                    : "Inactiva"
+                            }
+                        </span>
+                    </p>
+
+                </div>
             `;
+
+            elemento.addEventListener("click", () => {
+                elemento.classList.toggle("expandida");
+            });
 
             listaObrasSociales.appendChild(elemento);
         });
@@ -1825,26 +1954,40 @@ async function cargarListaConsultorios() {
             const elemento =
                 document.createElement("div");
 
-            elemento.classList.add("tarjeta", "tarjeta-consultorio");
+            elemento.classList.add(
+                "tarjeta",
+                "tarjeta-consultorio"
+            );
 
             elemento.innerHTML = `
-                <h3>${consultorio.nombre}</h3>
+                <div class="cabecera-tarjeta">
+                    <h3>${consultorio.nombre}</h3>
+                    <span class="flecha-tarjeta">›</span>
+                </div>
 
-                <p><strong>Dirección:</strong> ${
-                    consultorio.direccion ||
-                    "No registrada"
-                }</p>
+                <div class="detalle-tarjeta">
 
-                <p><strong>Teléfono:</strong> ${
-                    consultorio.telefono ||
-                    "No registrado"
-                }</p>
+                    <p>
+                        <strong>Dirección:</strong>
+                        ${consultorio.direccion || "No registrada"}
+                    </p>
 
-                <p><strong>Email:</strong> ${
-                    consultorio.email ||
-                    "No registrado"
-                }</p>
+                    <p>
+                        <strong>Teléfono:</strong>
+                        ${consultorio.telefono || "No registrado"}
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        ${consultorio.email || "No registrado"}
+                    </p>
+
+                </div>
             `;
+
+            elemento.addEventListener("click", () => {
+                elemento.classList.toggle("expandida");
+            });
 
             listaConsultorios.appendChild(elemento);
         });
@@ -1889,40 +2032,51 @@ async function cargarUsuarios() {
             );
 
             elemento.innerHTML = `
-                <h3>${usuario.nombre} ${usuario.apellido}</h3>
+                <div class="cabecera-tarjeta">
+                    <h3>${usuario.nombre} ${usuario.apellido}</h3>
+                    <span class="flecha-tarjeta">›</span>
+                </div>
 
-                <p>
-                    <strong>Email:</strong>
-                    ${usuario.email}
-                </p>
+                <div class="detalle-tarjeta">
 
-                <p>
-                    <strong>Rol:</strong>
-                    ${usuario.rol}
-                </p>
+                    <p>
+                        <strong>Email:</strong>
+                        ${usuario.email}
+                    </p>
 
-                <p>
-                    <strong>Estado:</strong>
-                    ${usuario.activo ? "Activo" : "Inactivo"}
-                </p>
+                    <p>
+                        <strong>Rol:</strong>
+                        ${usuario.rol}
+                    </p>
 
-                <div class="acciones">
+                    <p>
+                        <strong>Estado:</strong>
+                        ${usuario.activo ? "Activo" : "Inactivo"}
+                    </p>
 
-                    <button
-                        onclick="editarUsuario(${usuario.id_usuario})">
-                        Editar
-                    </button>
+                    <div class="acciones">
 
-                    <button
-                        onclick="cambiarEstadoUsuario(
-                            ${usuario.id_usuario},
-                            ${usuario.activo}
-                        )">
-                        ${usuario.activo ? "Desactivar" : "Activar"}
-                    </button>
+                        <button
+                            onclick="editarUsuario(${usuario.id_usuario}); event.stopPropagation();">
+                            Editar
+                        </button>
+
+                        <button
+                            onclick="cambiarEstadoUsuario(
+                                ${usuario.id_usuario},
+                                ${usuario.activo}
+                            ); event.stopPropagation();">
+                            ${usuario.activo ? "Desactivar" : "Activar"}
+                        </button>
+
+                    </div>
 
                 </div>
             `;
+
+            elemento.addEventListener("click", () => {
+                elemento.classList.toggle("expandida");
+            });
 
             listaUsuarios.appendChild(elemento);
         });

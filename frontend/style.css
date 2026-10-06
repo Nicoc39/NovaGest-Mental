@@ -598,8 +598,8 @@ TARJETAS
 
 .tarjeta {
 position: relative;
-min-height: 145px;
-padding: 20px;
+min-height: 0;
+padding: 15px 18px;
 overflow: hidden;
 background: white;
 border: 1px solid var(--borde);
@@ -628,7 +628,7 @@ box-shadow: 0 9px 25px rgba(24, 52, 61, 0.09);
 }
 
 .tarjeta h3 {
-margin-bottom: 13px;
+margin-bottom: 0;
 color: var(--azul-oscuro);
 font-size: 16px;
 }
@@ -673,6 +673,40 @@ background: #527c8d;
 
 .tarjeta-usuario::before {
 background: var(--azul);
+}
+
+/* TARJETAS EXPANDIBLES */
+
+.cabecera-tarjeta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.cabecera-tarjeta h3 {
+    margin-bottom: 0;
+}
+
+.flecha-tarjeta {
+    font-size: 24px;
+    color: var(--azul);
+    transition: transform 0.2s;
+}
+
+.detalle-tarjeta {
+    display: none;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--borde);
+}
+
+.tarjeta.expandida .detalle-tarjeta {
+    display: block;
+}
+
+.tarjeta.expandida .flecha-tarjeta {
+    transform: rotate(90deg);
 }
 
 /* =================================
