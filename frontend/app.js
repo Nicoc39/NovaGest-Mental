@@ -574,6 +574,95 @@ async function editarPaciente(id) {
     }
 }
 
+async function editarSesion(sesion) {
+
+    const fecha =
+        prompt(
+            "Nueva fecha:",
+            sesion.fecha
+        );
+
+    if (fecha === null || fecha.trim() === "") {
+        return;
+    }
+
+    const observaciones =
+        prompt(
+            "Nuevas observaciones:",
+            sesion.observaciones || ""
+        );
+
+    if (observaciones === null) {
+        return;
+    }
+
+    const idObraSocial =
+        prompt(
+            "Nuevo ID de obra social (dejar vacío para particular):",
+            sesion.id_obra_social || ""
+        );
+
+    if (idObraSocial === null) {
+        return;
+    }
+
+    try {
+
+        const datosSesion = {
+
+            id_turno: sesion.id_turno,
+
+            fecha: fecha,
+
+            observaciones:
+                observaciones.trim() || null,
+
+            id_obra_social:
+                idObraSocial.trim() === ""
+                    ? null
+                    : Number(idObraSocial)
+
+        };
+
+        const respuesta =
+            await apiFetch(
+                "/sesiones/" + sesion.id_sesion,
+                {
+
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(datosSesion)
+                }
+            );
+
+        if (!respuesta.ok) {
+
+            const error =
+                await respuesta.json();
+
+            alert(
+                error.detail ||
+                "No se pudo modificar la sesión."
+            );
+
+            return;
+        }
+
+        await cargarSesiones();
+        await cargarHistorias();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("No se pudo modificar la sesión.");
+    }
+}
+
 
 /* HISTORIAS CLÍNICAS */
 
@@ -1363,17 +1452,6 @@ async function cargarSesiones() {
         const sesiones =
             await respuesta.json();
 
-        sesiones.forEach(sesion => {
-            console.log(
-                "ID SESION:",
-                sesion.id_sesion,
-                "ID PACIENTE:",
-                sesion.id_paciente,
-                "PACIENTE:",
-                sesion.paciente
-            );
-        });
-
         window.sesionesCargadas = sesiones;
 
         listaSesiones.innerHTML = "";
@@ -1424,11 +1502,27 @@ async function cargarSesiones() {
                         ${sesion.id_obra_social || "Particular"}
                     </p>
 
+                    <button
+                        type="button"
+                        class="btn-secundario btn-editar-sesion"
+                    >
+                        Editar
+                    </button>
+
                 </div>
             `;
 
             elemento.addEventListener("click", () => {
                 elemento.classList.toggle("expandida");
+            });
+
+            const botonEditar =
+                elemento.querySelector(".btn-editar-sesion");
+
+            botonEditar.addEventListener("click", event => {
+                event.stopPropagation();
+
+                editarSesion(sesion);
             });
 
             listaSesiones.appendChild(elemento);

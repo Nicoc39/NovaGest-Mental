@@ -980,3 +980,38 @@ main {
 
 }
 
+.sesiones-historia {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--borde);
+}
+
+.sesiones-historia h4 {
+    margin-bottom: 12px;
+    color: var(--texto);
+}
+
+.sesion-historia {
+    margin-bottom: 10px;
+    padding: 12px 14px;
+    background: var(--fondo);
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+}
+
+.sesion-historia:last-child {
+    margin-bottom: 0;
+}
+
+.sesion-historia p {
+    margin-bottom: 6px;
+}
+
+.sesion-historia p:last-child {
+    margin-bottom: 0;
+}
+
+.sin-sesiones {
+    margin-top: 18px;
+    color: var(--texto-secundario);
+}

@@ -1609,6 +1609,82 @@ def crear_sesion(
     finally:
         cursor.close()
 
+@app.put("/sesiones/{id_sesion}")
+def actualizar_sesion(
+    id_sesion: int,
+    sesion: Sesion,
+    usuario=Depends(
+        verificar_roles(
+            "SUPERADMIN",
+            "ADMINISTRADOR",
+            "PROFESIONAL"
+        )
+    )
+):
+    cursor = conexion.cursor()
+
+    try:
+        consultorios = obtener_consultorios_usuario(usuario)
+
+        cursor.execute("""
+            SELECT p.id_consultorio
+            FROM sesion s
+            INNER JOIN turno t
+                ON s.id_turno = t.id_turno
+            INNER JOIN paciente p
+                ON t.id_paciente = p.id_paciente
+            WHERE s.id_sesion = %s;
+        """, (id_sesion,))
+
+        sesion_existente = cursor.fetchone()
+
+        if sesion_existente is None:
+            raise HTTPException(
+                status_code=404,
+                detail="La sesión no existe"
+            )
+
+        id_consultorio = sesion_existente[0]
+
+        if id_consultorio not in consultorios:
+            raise HTTPException(
+                status_code=403,
+                detail="No tenés acceso a esta sesión"
+            )
+
+        cursor.execute("""
+            UPDATE sesion
+            SET fecha = %s,
+                observaciones = %s,
+                id_obra_social = %s
+            WHERE id_sesion = %s;
+        """, (
+            sesion.fecha,
+            sesion.observaciones,
+            sesion.id_obra_social,
+            id_sesion
+        ))
+
+        conexion.commit()
+
+        return {
+            "mensaje": "Sesión actualizada correctamente"
+        }
+
+    except HTTPException:
+        conexion.rollback()
+        raise
+
+    except Exception as error:
+        conexion.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail=str(error)
+        )
+
+    finally:
+        cursor.close()
+
 class Pago(BaseModel):
     id_sesion: int
     fecha: str
