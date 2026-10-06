@@ -1285,6 +1285,8 @@ async function cargarTurnos() {
 
 async function cargarProximosTurnos() {
 
+    alert("SE EJECUTÓ cargarProximosTurnos");
+
     const contenedor =
         document.getElementById("proximosTurnos");
 
