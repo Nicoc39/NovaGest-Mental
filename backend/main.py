@@ -2063,3 +2063,148 @@ def crear_paciente_obra_social(
     finally:
         cursor.close()
 
+@app.post("/admin/seed-agenda")
+def cargar_agenda_demo(
+    usuario=Depends(verificar_roles("SUPERADMIN"))
+):
+    cursor = conexion.cursor()
+
+    try:
+        cursor.execute("""
+            SELECT id_paciente
+            FROM paciente
+            ORDER BY id_paciente
+            LIMIT 12;
+        """)
+        pacientes = [fila[0] for fila in cursor.fetchall()]
+
+        cursor.execute("""
+            SELECT id_profesional
+            FROM profesional
+            ORDER BY id_profesional
+            LIMIT 3;
+        """)
+        profesionales = [fila[0] for fila in cursor.fetchall()]
+
+        if len(pacientes) < 12 or len(profesionales) < 3:
+            raise HTTPException(
+                status_code=400,
+                detail="No hay suficientes pacientes o profesionales"
+            )
+
+        turnos = [
+            (pacientes[0], profesionales[0], "2026-09-08", "09:00", "10:00", "CONFIRMADO", "Seguimiento"),
+            (pacientes[1], profesionales[1], "2026-09-09", "10:00", "11:00", "CONFIRMADO", "Evaluación"),
+            (pacientes[2], profesionales[2], "2026-09-10", "11:00", "12:00", "CONFIRMADO", "Primera entrevista"),
+            (pacientes[3], profesionales[0], "2026-09-12", "09:00", "10:00", "CONFIRMADO", "Seguimiento"),
+            (pacientes[4], profesionales[1], "2026-09-15", "14:00", "15:00", "CONFIRMADO", "Control"),
+            (pacientes[5], profesionales[2], "2026-09-16", "15:00", "16:00", "CONFIRMADO", "Seguimiento"),
+            (pacientes[6], profesionales[1], "2026-09-18", "10:00", "11:00", "CONFIRMADO", "Seguimiento"),
+            (pacientes[7], profesionales[2], "2026-09-19", "11:00", "12:00", "CONFIRMADO", "Evaluación"),
+            (pacientes[8], profesionales[0], "2026-09-22", "09:00", "10:00", "CONFIRMADO", "Control"),
+            (pacientes[9], profesionales[1], "2026-09-24", "14:00", "15:00", "CONFIRMADO", "Seguimiento"),
+            (pacientes[10], profesionales[2], "2026-09-26", "15:00", "16:00", "CONFIRMADO", "Control"),
+            (pacientes[11], profesionales[0], "2026-09-29", "10:00", "11:00", "CONFIRMADO", "Seguimiento"),
+
+            (pacientes[0], profesionales[0], "2026-10-07", "09:00", "10:00", "CONFIRMADO", "Próximo control"),
+            (pacientes[1], profesionales[1], "2026-10-08", "10:00", "11:00", "PENDIENTE", "Turno pendiente"),
+            (pacientes[2], profesionales[2], "2026-10-09", "11:00", "12:00", "CONFIRMADO", "Próxima sesión"),
+            (pacientes[3], profesionales[0], "2026-10-10", "14:00", "15:00", "REPROGRAMADO", "Solicitó cambio de horario"),
+            (pacientes[4], profesionales[1], "2026-10-12", "15:00", "16:00", "PENDIENTE", "Turno solicitado"),
+            (pacientes[5], profesionales[2], "2026-10-13", "09:00", "10:00", "CONFIRMADO", "Próximo seguimiento")
+        ]
+
+        ids_turnos = []
+
+        for turno in turnos:
+            cursor.execute("""
+                INSERT INTO turno
+                (id_paciente, id_profesional, fecha,
+                 hora_inicio, hora_fin, estado, observaciones)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                RETURNING id_turno;
+            """, turno)
+
+            ids_turnos.append(cursor.fetchone()[0])
+
+        ids_sesiones = []
+
+        for i in range(12):
+            cursor.execute("""
+                INSERT INTO sesion
+                (id_turno, fecha, observaciones, id_obra_social)
+                VALUES (%s, %s, %s, %s)
+                RETURNING id_sesion;
+            """, (
+                ids_turnos[i],
+                turnos[i][2],
+                "Sesión registrada correctamente.",
+                (i % 4) + 1
+            ))
+
+            ids_sesiones.append(cursor.fetchone()[0])
+
+        importes = [
+            18000,
+            20000,
+            18000,
+            22000,
+            20000,
+            18000,
+            22000,
+            20000,
+            18000,
+            22000,
+            20000,
+            18000
+        ]
+
+        medios = [
+            "Transferencia",
+            "Efectivo",
+            "Tarjeta",
+            "Transferencia",
+            "Efectivo",
+            "Transferencia",
+            "Tarjeta",
+            "Efectivo",
+            "Transferencia",
+            "Tarjeta",
+            "Efectivo",
+            "Transferencia"
+        ]
+
+        for i in range(12):
+            cursor.execute("""
+                INSERT INTO pago
+                (id_sesion, fecha, importe, medio_pago)
+                VALUES (%s, %s, %s, %s);
+            """, (
+                ids_sesiones[i],
+                turnos[i][2],
+                importes[i],
+                medios[i]
+            ))
+
+        conexion.commit()
+
+        return {
+            "mensaje": "Agenda demo cargada correctamente",
+            "turnos": 18,
+            "sesiones": 12,
+            "pagos": 12
+        }
+
+    except HTTPException:
+        conexion.rollback()
+        raise
+
+    except Exception as error:
+        conexion.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=str(error)
+        )
+
+    finally:
+        cursor.close()
