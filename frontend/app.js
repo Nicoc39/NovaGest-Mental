@@ -2932,6 +2932,12 @@ formUsuario.addEventListener("submit", async (evento) => {
 
     evento.preventDefault();
 
+    const mensajeUsuario =
+        document.getElementById("mensajeUsuario");
+
+    mensajeUsuario.textContent = "";
+    mensajeUsuario.className = "mensaje-formulario";
+
     const usuario = {
 
         nombre:
@@ -2972,10 +2978,11 @@ formUsuario.addEventListener("submit", async (evento) => {
             const error =
                 await respuesta.json();
 
-            alert(
+            mensajeUsuario.textContent =
                 error.detail ||
-                "No se pudo crear el usuario."
-            );
+                "No se pudo crear el usuario.";
+
+            mensajeUsuario.classList.add("error");
 
             return;
         }
@@ -2986,15 +2993,14 @@ formUsuario.addEventListener("submit", async (evento) => {
 
         cargarUsuarios();
 
-        alert("Usuario creado correctamente.");
-
     } catch (error) {
 
         console.error(error);
 
-        alert(
-            "No se pudo guardar el usuario."
-        );
+        mensajeUsuario.textContent =
+            "No se pudo guardar el usuario.";
+
+        mensajeUsuario.classList.add("error");
     }
 });
 

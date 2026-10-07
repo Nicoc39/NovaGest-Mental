@@ -467,6 +467,18 @@ grid-column: 1 / -1;
 grid-column: 1 / -1;
 }
 
+.mensaje-formulario {
+grid-column: 1 / -1;
+margin-top: 2px;
+margin-bottom: 5px;
+font-size: 12px;
+font-weight: bold;
+}
+
+.mensaje-formulario.error {
+color: var(--rojo);
+}
+
 /* =================================
 CAMPOS
 ================================= */
