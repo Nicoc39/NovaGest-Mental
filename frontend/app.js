@@ -107,11 +107,12 @@ async function apiFetch(url, opciones = {}) {
     });
 
     if (respuesta.status === 401) {
-        localStorage.removeItem("token");
 
-        if (login) {
-            login.classList.remove("oculto");
-        }
+        localStorage.removeItem("token");
+        localStorage.removeItem("usuario");
+        localStorage.removeItem("rol");
+
+        mostrarLogin();
 
         throw new Error("Sesión expirada");
     }
@@ -2595,6 +2596,21 @@ async function cargarUsuarios() {
 
         const respuesta =
             await apiFetch("/usuarios");
+
+        if (respuesta.status === 403) {
+
+            listaUsuarios.innerHTML =
+                "<p>No tenés permisos para acceder a los usuarios.</p>";
+
+            return;
+        }
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudieron cargar los usuarios."
+            );
+        }
 
         const usuarios =
             await respuesta.json();
