@@ -41,11 +41,19 @@ btnCerrarSesion.addEventListener("click", () => {
 async function cargarConsultorios() {
 
     try {
-        const respuesta = await apiFetch(
-            "/consultorios"
-        );
 
-        const consultorios = await respuesta.json();
+        const respuesta =
+            await apiFetch("/consultorios");
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudieron cargar los consultorios."
+            );
+        }
+
+        const consultorios =
+            await respuesta.json();
 
         consultorioPaciente.innerHTML =
             '<option value="">Seleccione un consultorio</option>';
@@ -58,34 +66,60 @@ async function cargarConsultorios() {
 
         consultorios.forEach(consultorio => {
 
-            const opcionPaciente = document.createElement("option");
+            const opcionPaciente =
+                document.createElement("option");
 
-            opcionPaciente.value = consultorio.id_consultorio;
-            opcionPaciente.textContent = consultorio.nombre;
+            opcionPaciente.value =
+                consultorio.id_consultorio;
 
-            consultorioPaciente.appendChild(opcionPaciente);
+            opcionPaciente.textContent =
+                consultorio.nombre;
 
-
-            const opcionProfesional = document.createElement("option");
-
-            opcionProfesional.value = consultorio.id_consultorio;
-            opcionProfesional.textContent = consultorio.nombre;
-
-            consultorioProfesional.appendChild(opcionProfesional);
+            consultorioPaciente.appendChild(
+                opcionPaciente
+            );
 
 
-            const opcionUsuario = document.createElement("option");
+            const opcionProfesional =
+                document.createElement("option");
 
-            opcionUsuario.value = consultorio.id_consultorio;
-            opcionUsuario.textContent = consultorio.nombre;
+            opcionProfesional.value =
+                consultorio.id_consultorio;
 
-            consultorioUsuario.appendChild(opcionUsuario);
+            opcionProfesional.textContent =
+                consultorio.nombre;
+
+            consultorioProfesional.appendChild(
+                opcionProfesional
+            );
+
+
+            const opcionUsuario =
+                document.createElement("option");
+
+            opcionUsuario.value =
+                consultorio.id_consultorio;
+
+            opcionUsuario.textContent =
+                consultorio.nombre;
+
+            consultorioUsuario.appendChild(
+                opcionUsuario
+            );
         });
 
-        cargarListaConsultorios();
+        if (
+            localStorage.getItem("rol") === "SUPERADMIN"
+        ) {
+            await cargarListaConsultorios();
+        }
 
     } catch (error) {
-        console.error("Error al cargar consultorios:", error);
+
+        console.error(
+            "Error al cargar consultorios:",
+            error
+        );
     }
 }
 
@@ -216,10 +250,23 @@ formLogin.addEventListener("submit", async (evento) => {
         cargarProfesionales();
         cargarTurnos();
         cargarProximosTurnos();
-        cargarSesiones();
-        cargarPagos();
-        cargarObrasSociales();
-        cargarHistorias();
+
+        if (rolUsuario !== "ADMINISTRATIVO") {
+            cargarSesiones();
+            cargarHistorias();
+        }
+
+        if (rolUsuario !== "PROFESIONAL") {
+            cargarPagos();
+            cargarObrasSociales();
+        }
+
+        if (
+            rolUsuario === "SUPERADMIN" ||
+            rolUsuario === "ADMINISTRADOR"
+        ) {
+            cargarUsuarios();
+        }
 
     } catch (error) {
 
@@ -986,16 +1033,44 @@ async function cargarPacientesEnHistoria() {
 
 async function cargarHistorias() {
 
+    const rol = localStorage.getItem("rol");
+
+    if (rol === "ADMINISTRATIVO") {
+        return;
+    }
+
     try {
 
         const respuesta =
             await apiFetch("/historias-clinicas");
+
+        if (respuesta.status === 403) {
+
+            listaHistorias.innerHTML =
+                "<p>No tenés permisos para acceder a las historias clínicas.</p>";
+
+            return;
+        }
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudieron cargar las historias clínicas."
+            );
+        }
 
         const historias =
             await respuesta.json();
 
         const respuestaSesiones =
             await apiFetch("/sesiones");
+
+        if (!respuestaSesiones.ok) {
+
+            throw new Error(
+                "No se pudieron cargar las sesiones."
+            );
+        }
 
         const sesiones =
             await respuestaSesiones.json();
@@ -1823,10 +1898,31 @@ async function cargarTurnosEnSesion() {
 
 async function cargarSesiones() {
 
+    const rol = localStorage.getItem("rol");
+
+    if (rol === "ADMINISTRATIVO") {
+        return;
+    }
+
     try {
 
         const respuesta =
             await apiFetch("/sesiones");
+
+        if (respuesta.status === 403) {
+
+            listaSesiones.innerHTML =
+                "<p>No tenés permisos para acceder a las sesiones.</p>";
+
+            return;
+        }
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudieron cargar las sesiones."
+            );
+        }
 
         const sesiones =
             await respuesta.json();
@@ -1835,6 +1931,13 @@ async function cargarSesiones() {
 
         const respuestaObras =
             await apiFetch("/obras-sociales");
+
+        if (!respuestaObras.ok) {
+
+            throw new Error(
+                "No se pudieron cargar las obras sociales."
+            );
+        }
 
         const obrasSociales =
             await respuestaObras.json();
@@ -2075,10 +2178,31 @@ async function cargarSesionesEnPago() {
 
 async function cargarPagos() {
 
+    const rol = localStorage.getItem("rol");
+
+    if (rol === "PROFESIONAL") {
+        return;
+    }
+
     try {
 
         const respuesta =
             await apiFetch("/pagos");
+
+        if (respuesta.status === 403) {
+
+            listaPagos.innerHTML =
+                "<p>No tenés permisos para acceder a los pagos.</p>";
+
+            return;
+        }
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudieron cargar los pagos."
+            );
+        }
 
         const pagos =
             await respuesta.json();
@@ -2283,10 +2407,31 @@ btnCancelarObraSocial.addEventListener("click", () => {
 
 async function cargarObrasSociales() {
 
+    const rol = localStorage.getItem("rol");
+
+    if (rol === "PROFESIONAL") {
+        return;
+    }
+
     try {
 
         const respuesta =
             await apiFetch("/obras-sociales");
+
+        if (respuesta.status === 403) {
+
+            listaObrasSociales.innerHTML =
+                "<p>No tenés permisos para acceder a las obras sociales.</p>";
+
+            return;
+        }
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudieron cargar las obras sociales."
+            );
+        }
 
         const obrasSociales =
             await respuesta.json();
@@ -2444,86 +2589,35 @@ btnCancelarUsuario.addEventListener("click", () => {
     formUsuario.reset();
 });
 
-async function cargarConsultorios() {
 
-    try {
-
-        const respuesta =
-            await apiFetch("/consultorios");
-
-        const consultorios =
-            await respuesta.json();
-
-        consultorioPaciente.innerHTML =
-            '<option value="">Seleccione un consultorio</option>';
-
-        consultorioProfesional.innerHTML =
-            '<option value="">Seleccione un consultorio</option>';
-
-        consultorioUsuario.innerHTML =
-            '<option value="">Seleccione un consultorio</option>';
-
-        consultorios.forEach(consultorio => {
-
-            const opcionPaciente =
-                document.createElement("option");
-
-            opcionPaciente.value =
-                consultorio.id_consultorio;
-
-            opcionPaciente.textContent =
-                consultorio.nombre;
-
-            consultorioPaciente.appendChild(
-                opcionPaciente
-            );
-
-
-            const opcionProfesional =
-                document.createElement("option");
-
-            opcionProfesional.value =
-                consultorio.id_consultorio;
-
-            opcionProfesional.textContent =
-                consultorio.nombre;
-
-            consultorioProfesional.appendChild(
-                opcionProfesional
-            );
-
-
-            const opcionUsuario =
-                document.createElement("option");
-
-            opcionUsuario.value =
-                consultorio.id_consultorio;
-
-            opcionUsuario.textContent =
-                consultorio.nombre;
-
-            consultorioUsuario.appendChild(
-                opcionUsuario
-            );
-        });
-
-        cargarListaConsultorios();
-
-    } catch (error) {
-
-        console.error(
-            "Error al cargar consultorios:",
-            error
-        );
-    }
-}
 
 async function cargarListaConsultorios() {
 
+    const rol = localStorage.getItem("rol");
+
+    if (rol !== "SUPERADMIN") {
+        return;
+    }
+
     try {
 
         const respuesta =
             await apiFetch("/consultorios");
+
+        if (respuesta.status === 403) {
+
+            listaConsultorios.innerHTML =
+                "<p>No tenés permisos para acceder a los consultorios.</p>";
+
+            return;
+        }
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudieron cargar los consultorios."
+            );
+        }
 
         const consultorios =
             await respuesta.json();
@@ -3052,6 +3146,51 @@ if (tokenGuardado) {
 
 function cambiarModulo(idSeccion) {
 
+    const rol = localStorage.getItem("rol");
+
+    if (
+        idSeccion === "seccionHistorias" &&
+        rol === "ADMINISTRATIVO"
+    ) {
+        return;
+    }
+
+    if (
+        idSeccion === "seccionSesiones" &&
+        rol === "ADMINISTRATIVO"
+    ) {
+        return;
+    }
+
+    if (
+        idSeccion === "seccionPagos" &&
+        rol === "PROFESIONAL"
+    ) {
+        return;
+    }
+
+    if (
+        idSeccion === "seccionObrasSociales" &&
+        rol === "PROFESIONAL"
+    ) {
+        return;
+    }
+
+    if (
+        idSeccion === "seccionConsultorios" &&
+        rol !== "SUPERADMIN"
+    ) {
+        return;
+    }
+
+    if (
+        idSeccion === "seccionUsuarios" &&
+        rol !== "SUPERADMIN" &&
+        rol !== "ADMINISTRADOR"
+    ) {
+        return;
+    }
+
     document.getElementById("seccionDashboard").classList.add("oculto");
     document.getElementById("seccionPacientes").classList.add("oculto");
     document.getElementById("seccionHistorias").classList.add("oculto");
@@ -3069,8 +3208,12 @@ function cambiarModulo(idSeccion) {
         opcion.classList.remove("activo");
     });
 
-    document.querySelector(
-        `.opcion-menu[onclick*="'${idSeccion}'"]`
-    ).classList.add("activo");
+    const opcionActiva =
+        document.querySelector(
+            `.opcion-menu[onclick*="'${idSeccion}'"]`
+        );
 
+    if (opcionActiva) {
+        opcionActiva.classList.add("activo");
+    }
 }
