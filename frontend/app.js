@@ -219,18 +219,6 @@ formLogin.addEventListener("submit", async (evento) => {
 
         configurarMenuPorRol(rolUsuario);
 
-        document.querySelectorAll(".opcion-menu").forEach(opcion => {
-
-            if (opcion.textContent.trim() === "Consultorios") {
-
-                if (rolUsuario !== "SUPERADMIN") {
-                    opcion.classList.add("oculto");
-                } else {
-                    opcion.classList.remove("oculto");
-                }
-            }
-        });
-
         btnNuevoProfesional.classList.remove("oculto");
 
         if (
@@ -2407,12 +2395,6 @@ btnCancelarObraSocial.addEventListener("click", () => {
 
 async function cargarObrasSociales() {
 
-    const rol = localStorage.getItem("rol");
-
-    if (rol === "PROFESIONAL") {
-        return;
-    }
-
     try {
 
         const respuesta =
@@ -3018,78 +3000,53 @@ formUsuario.addEventListener("submit", async (evento) => {
 
 function configurarMenuPorRol(rol) {
 
-    const enlacesMenu =
-        document.querySelectorAll(".opcion-menu");
+    document.querySelectorAll(".opcion-menu").forEach(enlace => {
 
-    enlacesMenu.forEach(enlace => {
+        enlace.classList.remove("oculto");
+
+        const accion = enlace.getAttribute("onclick");
 
         if (
-            enlace.textContent.trim() === "Consultorios"
+            accion.includes("seccionConsultorios") &&
+            rol !== "SUPERADMIN"
         ) {
-
-            if (rol !== "SUPERADMIN") {
-                enlace.classList.add("oculto");
-            } else {
-                enlace.classList.remove("oculto");
-            }
+            enlace.classList.add("oculto");
         }
 
         if (
-            enlace.textContent.trim() === "Historias clínicas"
+            accion.includes("seccionUsuarios") &&
+            rol !== "SUPERADMIN" &&
+            rol !== "ADMINISTRADOR"
         ) {
-
-            if (rol === "ADMINISTRATIVO") {
-                enlace.classList.add("oculto");
-            } else {
-                enlace.classList.remove("oculto");
-            }
+            enlace.classList.add("oculto");
         }
 
         if (
-            enlace.textContent.trim() === "Pagos"
+            accion.includes("seccionHistorias") &&
+            rol === "ADMINISTRATIVO"
         ) {
-
-            if (rol === "PROFESIONAL") {
-                enlace.classList.add("oculto");
-            } else {
-                enlace.classList.remove("oculto");
-            }
+            enlace.classList.add("oculto");
         }
 
         if (
-            enlace.textContent.trim() === "Obras sociales"
+            accion.includes("seccionSesiones") &&
+            rol === "ADMINISTRATIVO"
         ) {
-
-            if (rol === "PROFESIONAL") {
-                enlace.classList.add("oculto");
-            } else {
-                enlace.classList.remove("oculto");
-            }
+            enlace.classList.add("oculto");
         }
 
         if (
-            enlace.textContent.trim() === "Sesiones"
+            accion.includes("seccionPagos") &&
+            rol === "PROFESIONAL"
         ) {
-
-            if (rol === "ADMINISTRATIVO") {
-                enlace.classList.add("oculto");
-            } else {
-                enlace.classList.remove("oculto");
-            }
+            enlace.classList.add("oculto");
         }
 
         if (
-            enlace.textContent.trim() === "Usuarios"
+            accion.includes("seccionObrasSociales") &&
+            rol === "PROFESIONAL"
         ) {
-
-            if (
-                rol !== "SUPERADMIN" &&
-                rol !== "ADMINISTRADOR"
-            ) {
-                enlace.classList.add("oculto");
-            } else {
-                enlace.classList.remove("oculto");
-            }
+            enlace.classList.add("oculto");
         }
     });
 }

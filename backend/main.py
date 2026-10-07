@@ -1839,7 +1839,8 @@ def listar_obras_sociales(
         verificar_roles(
             "SUPERADMIN",
             "ADMINISTRADOR",
-            "ADMINISTRATIVO"
+            "ADMINISTRATIVO",
+            "PROFESIONAL"
         )
     )
 ):
