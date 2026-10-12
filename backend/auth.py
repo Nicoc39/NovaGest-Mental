@@ -1,10 +1,19 @@
+import os
 from datetime import datetime, timedelta, timezone
 
+from dotenv import load_dotenv
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
+load_dotenv()
 
-SECRET_KEY = "novagest-clave-secreta-cambiar-en-produccion"
+SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError(
+        "La variable de entorno JWT_SECRET_KEY no está configurada. "
+        "Configurá esta variable antes de iniciar el backend."
+    )
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
